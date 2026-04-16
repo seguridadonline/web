@@ -1,7 +1,7 @@
 ---
 /**
- * Footer Component
- * Flexible footer with variant-based configuration
+ * Footer Component (i18n-aware)
+ * Flexible footer with variant-based configuration and translations
  *
  * Layouts:
  * - simple: Single row with logo, nav links, and social
@@ -10,19 +10,19 @@
  * - stacked: Vertically stacked logo, nav, copyright
  *
  * Features:
- * - Dynamic navigation from nav.config.ts (default) or custom nav prop
+ * - Dynamic navigation with translations
  * - Social links with icon support
- * - Copyright with {year} placeholder
+ * - Copyright with {year} and {siteName} placeholders
  * - Legal links section
  * - Full slot support for customization
  */
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/cn';
-import { getNavItems, type NavItem as NavConfigItem } from '@/config/nav.config';
-import { footerVariants, footerColumnGridVariants } from './footer.variants';
 import Logo from '@/components/ui/marketing/Logo/Logo.astro';
 import Icon from '@/components/ui/primitives/Icon/Icon.astro';
 import siteConfig from '@/config/site.config';
+import { type Locale, defaultLocale, getLocaleFromPath } from '@/i18n/config';
+import { useTranslations, getLocalizedPath, getNavRoutes } from '@/i18n/index';
 
 export interface NavItem {
   label: string;
@@ -47,6 +47,8 @@ export interface LegalLink {
 }
 
 interface Props extends HTMLAttributes<'footer'> {
+  /** Locale for translations */
+  locale?: Locale;
   /** Layout style */
   layout?: 'simple' | 'columns' | 'minimal' | 'stacked';
   /** Number of columns (only for columns layout) */
@@ -74,6 +76,7 @@ interface Props extends HTMLAttributes<'footer'> {
 }
 
 const {
+  locale: localeProp,
   layout = 'simple',
   columns = 3,
   background = 'default',
@@ -82,7 +85,7 @@ const {
   socialLinks = [],
   showSocial = true,
   showCopyright = true,
-  copyright = '© {year} {siteName}. Designed by <a href="https://hansmartens.dev" class="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Hans Martens</a>.',
+  copyright,
   legalLinks = [],
   hideLogo = false,
   tagline,
@@ -90,19 +93,29 @@ const {
   ...attrs
 } = Astro.props;
 
-// Get navigation items
-const defaultNav: NavItem[] = getNavItems().map((item: NavConfigItem) => ({
-  label: item.label,
-  href: item.href,
+// Get locale from prop or infer from URL
+const locale = localeProp || getLocaleFromPath(Astro.url.pathname);
+const t = useTranslations(locale);
+
+// Get navigation items from i18n routes or custom nav
+const defaultNav = getNavRoutes(locale);
+const navItems: NavItem[] = nav || defaultNav.map(route => ({
+  label: t(route.label as any) || route.label,
+  href: route.path,
 }));
-const navItems: NavItem[] = nav || defaultNav;
 
 // Default external links if none provided via nav
-const allNavItems: NavItem[] = nav ? navItems : navItems;
+const defaultExternalLinks: NavItem[] = [
+  { label: t('footer.links.twitter'), href: 'https://x.com/sguridadonline', external: true },
+];
+
+// Add external links to nav if using default nav
+const allNavItems: NavItem[] = nav ? navItems : [...navItems, ...defaultExternalLinks];
 
 // Process copyright text
 const currentYear = new Date().getFullYear();
-const processedCopyright = copyright
+const defaultCopyright = copyright || t('footer.copyright', { year: currentYear });
+const processedCopyright = defaultCopyright
   .replace('{year}', String(currentYear))
   .replace('{siteName}', siteConfig.name);
 
@@ -113,13 +126,31 @@ const hasColumnsSlot = Astro.slots.has('columns');
 const hasSocialSlot = Astro.slots.has('social');
 const hasBottomSlot = Astro.slots.has('bottom');
 
+// Background variants
+const backgrounds: Record<NonNullable<Props['background']>, string> = {
+  default: 'bg-background border-t border-border',
+  secondary: 'bg-surface-secondary border-t border-border',
+  invert: 'bg-surface-invert text-on-invert border-t border-border',
+};
+
+// Column grid classes
+const columnGrids: Record<NonNullable<Props['columns']>, string> = {
+  2: 'md:grid-cols-2',
+  3: 'md:grid-cols-3',
+  4: 'md:grid-cols-4',
+};
+
 // Compute footer classes
-const footerClasses = cn(footerVariants({ background }), className);
+const footerClasses = cn(
+  'py-12',
+  backgrounds[background],
+  className
+);
 
 // Social platform to icon mapping
 const socialIcons: Record<string, string> = {
   github: 'github',
-  twitter: 'x-twitter',
+  twitter: 'twitter',
   linkedin: 'linkedin',
 };
 
@@ -127,40 +158,51 @@ const socialIcons: Record<string, string> = {
 function getSocialIcon(platform: string): string {
   return socialIcons[platform] || platform;
 }
+
+// Use tagline from props or translation
+const displayTagline = tagline || t('site.description');
 ---
 
 <footer class={footerClasses} {...attrs}>
   <div class="mx-auto max-w-6xl px-6">
     {layout === 'simple' && (
-      <>
-      <div class="flex flex-col md:flex-row justify-between items-center gap-[var(--space-stack-lg)]">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Logo & Tagline */}
         {!hideLogo && (
           <div class="flex flex-col items-center md:items-start gap-2">
             {hasLogoSlot ? (
               <slot name="logo" />
             ) : (
-              <a href="/" class="flex items-center gap-2">
-                <Logo size="md" />
-                <span class="font-display text-base font-bold text-brand-500">
+              <a href={getLocalizedPath('home', locale)} class="flex items-center gap-2">
+                <Logo size="sm" />
+                <span class="font-display text-lg font-bold text-brand-500">
                   {siteConfig.name}
                 </span>
               </a>
             )}
-            {(hasTaglineSlot || tagline) && (
-              <p class="text-sm text-foreground-muted">
-                {hasTaglineSlot ? <slot name="tagline" /> : tagline}
+            {(hasTaglineSlot || displayTagline) && (
+              <p class={cn(
+                'text-sm',
+                background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+              )}>
+                {hasTaglineSlot ? <slot name="tagline" /> : displayTagline}
               </p>
             )}
           </div>
         )}
 
         {/* Navigation Links */}
-        <nav class="flex flex-wrap justify-center gap-[var(--space-inline-lg)] md:gap-[var(--space-stack-lg)] text-sm font-medium text-foreground-muted">
+        <nav class={cn(
+          'flex flex-wrap justify-center gap-6 md:gap-8 text-sm font-medium',
+          background === 'invert' ? 'text-on-invert/70' : 'text-foreground-muted'
+        )}>
           {allNavItems.map((item) => (
             <a
               href={item.href}
-              class="transition-colors hover:text-foreground"
+              class={cn(
+                'transition-colors',
+                background === 'invert' ? 'hover:text-on-invert' : 'hover:text-foreground'
+              )}
               target={item.external || item.href.startsWith('http') ? '_blank' : undefined}
               rel={item.external || item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
             >
@@ -174,11 +216,16 @@ function getSocialIcon(platform: string): string {
           hasSocialSlot ? (
             <slot name="social" />
           ) : (
-            <div class="flex items-center gap-[var(--space-stack-md)]">
+            <div class="flex items-center gap-4">
               {socialLinks.map((social) => (
                 <a
                   href={social.href}
-                  class="transition-colors text-foreground-muted hover:text-foreground"
+                  class={cn(
+                    'transition-colors',
+                    background === 'invert'
+                      ? 'text-on-invert/60 hover:text-on-invert'
+                      : 'text-foreground-muted hover:text-foreground'
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label || `Follow us on ${social.platform}`}
@@ -190,42 +237,44 @@ function getSocialIcon(platform: string): string {
           )
         )}
       </div>
-      {showCopyright && (
-        <div class="mt-[var(--space-stack-lg)] pt-[var(--space-stack-lg)] border-t border-border text-center">
-          <p class="text-sm text-foreground-muted" set:html={processedCopyright} />
-        </div>
-      )}
-      </>
     )}
 
     {layout === 'columns' && (
       <>
-        <div class={footerColumnGridVariants({ columns })}>
+        <div class={cn('grid grid-cols-1 gap-8', columnGrids[columns])}>
           {/* Logo Column */}
           {!hideLogo && (
-            <div class="space-y-[var(--space-stack-md)]">
+            <div class="space-y-4">
               {hasLogoSlot ? (
                 <slot name="logo" />
               ) : (
-                <a href="/" class="flex items-center gap-2">
-                  <Logo size="md" />
-                  <span class="font-display text-base font-bold text-brand-500">
+                <a href={getLocalizedPath('home', locale)} class="flex items-center gap-2">
+                  <Logo size="sm" />
+                  <span class="font-display text-lg font-bold text-brand-500">
                     {siteConfig.name}
                   </span>
                 </a>
               )}
-              {(hasTaglineSlot || tagline) && (
-                <p class="text-sm max-w-xs text-foreground-muted">
-                  {hasTaglineSlot ? <slot name="tagline" /> : tagline}
+              {(hasTaglineSlot || displayTagline) && (
+                <p class={cn(
+                  'text-sm max-w-xs',
+                  background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+                )}>
+                  {hasTaglineSlot ? <slot name="tagline" /> : displayTagline}
                 </p>
               )}
               {/* Social Links in columns layout */}
               {showSocial && socialLinks.length > 0 && (
-                <div class="flex items-center gap-[var(--space-stack-md)] pt-2">
+                <div class="flex items-center gap-4 pt-2">
                   {socialLinks.map((social) => (
                     <a
                       href={social.href}
-                      class="transition-colors text-foreground-muted hover:text-foreground"
+                      class={cn(
+                        'transition-colors',
+                        background === 'invert'
+                          ? 'text-on-invert/60 hover:text-on-invert'
+                          : 'text-foreground-muted hover:text-foreground'
+                      )}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label || `Follow us on ${social.platform}`}
@@ -243,8 +292,11 @@ function getSocialIcon(platform: string): string {
             <slot name="columns" />
           ) : (
             linkGroups.map((group) => (
-              <div class="space-y-[var(--space-stack-md)]">
-                <h3 class="font-semibold text-sm text-foreground">
+              <div class="space-y-4">
+                <h3 class={cn(
+                  'font-semibold text-sm',
+                  background === 'invert' ? 'text-on-invert' : 'text-foreground'
+                )}>
                   {group.title}
                 </h3>
                 <ul class="space-y-2">
@@ -252,7 +304,12 @@ function getSocialIcon(platform: string): string {
                     <li>
                       <a
                         href={link.href}
-                        class="text-sm transition-colors text-foreground-muted hover:text-foreground"
+                        class={cn(
+                          'text-sm transition-colors',
+                          background === 'invert'
+                            ? 'text-on-invert/70 hover:text-on-invert'
+                            : 'text-foreground-muted hover:text-foreground'
+                        )}
                         target={link.external || link.href.startsWith('http') ? '_blank' : undefined}
                         rel={link.external || link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                       >
@@ -268,20 +325,33 @@ function getSocialIcon(platform: string): string {
 
         {/* Bottom section */}
         {(showCopyright || legalLinks.length > 0) && (
-          <div class="mt-[var(--space-section-header)] pt-[var(--space-stack-lg)] border-t border-border flex flex-col md:flex-row justify-between items-center gap-[var(--space-stack-md)]">
+          <div class={cn(
+            'mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4',
+            background === 'invert' ? 'border-on-invert/10' : 'border-border'
+          )}>
             {hasBottomSlot ? (
               <slot name="bottom" />
             ) : (
               <>
                 {showCopyright && (
-                  <p class="text-sm text-foreground-muted" set:html={processedCopyright} />
+                  <p class={cn(
+                    'text-sm',
+                    background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+                  )}>
+                    {processedCopyright}
+                  </p>
                 )}
                 {legalLinks.length > 0 && (
-                  <div class="flex items-center gap-[var(--space-inline-lg)]">
+                  <div class="flex items-center gap-6">
                     {legalLinks.map((link) => (
                       <a
                         href={link.href}
-                        class="text-sm transition-colors text-foreground-muted hover:text-foreground"
+                        class={cn(
+                          'text-sm transition-colors',
+                          background === 'invert'
+                            ? 'text-on-invert/60 hover:text-on-invert'
+                            : 'text-foreground-muted hover:text-foreground'
+                        )}
                       >
                         {link.label}
                       </a>
@@ -298,19 +368,24 @@ function getSocialIcon(platform: string): string {
     {layout === 'minimal' && (
       <div class="text-center">
         {showCopyright && (
-          <p class="text-sm text-foreground-muted" set:html={processedCopyright} />
+          <p class={cn(
+            'text-sm',
+            background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+          )}>
+            {processedCopyright}
+          </p>
         )}
       </div>
     )}
 
     {layout === 'stacked' && (
-      <div class="flex flex-col items-center gap-[var(--space-stack-lg)] text-center">
+      <div class="flex flex-col items-center gap-8 text-center">
         {/* Logo */}
         {!hideLogo && (
           hasLogoSlot ? (
             <slot name="logo" />
           ) : (
-            <a href="/" class="flex items-center gap-2">
+            <a href={getLocalizedPath('home', locale)} class="flex items-center gap-2">
               <Logo size="md" />
               <span class="font-display text-xl font-bold text-brand-500">
                 {siteConfig.name}
@@ -320,18 +395,27 @@ function getSocialIcon(platform: string): string {
         )}
 
         {/* Tagline */}
-        {(hasTaglineSlot || tagline) && (
-          <p class="text-sm max-w-md text-foreground-muted">
-            {hasTaglineSlot ? <slot name="tagline" /> : tagline}
+        {(hasTaglineSlot || displayTagline) && (
+          <p class={cn(
+            'text-sm max-w-md',
+            background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+          )}>
+            {hasTaglineSlot ? <slot name="tagline" /> : displayTagline}
           </p>
         )}
 
         {/* Navigation Links */}
-        <nav class="flex flex-wrap justify-center gap-[var(--space-inline-lg)] text-sm font-medium text-foreground-muted">
+        <nav class={cn(
+          'flex flex-wrap justify-center gap-6 text-sm font-medium',
+          background === 'invert' ? 'text-on-invert/70' : 'text-foreground-muted'
+        )}>
           {allNavItems.map((item) => (
             <a
               href={item.href}
-              class="transition-colors hover:text-foreground"
+              class={cn(
+                'transition-colors',
+                background === 'invert' ? 'hover:text-on-invert' : 'hover:text-foreground'
+              )}
               target={item.external || item.href.startsWith('http') ? '_blank' : undefined}
               rel={item.external || item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
             >
@@ -342,11 +426,16 @@ function getSocialIcon(platform: string): string {
 
         {/* Social Links */}
         {showSocial && socialLinks.length > 0 && (
-          <div class="flex items-center gap-[var(--space-stack-md)]">
+          <div class="flex items-center gap-4">
             {socialLinks.map((social) => (
               <a
                 href={social.href}
-                class="transition-colors text-foreground-muted hover:text-foreground"
+                class={cn(
+                  'transition-colors',
+                  background === 'invert'
+                    ? 'text-on-invert/60 hover:text-on-invert'
+                    : 'text-foreground-muted hover:text-foreground'
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label || `Follow us on ${social.platform}`}
@@ -359,16 +448,29 @@ function getSocialIcon(platform: string): string {
 
         {/* Copyright & Legal */}
         {(showCopyright || legalLinks.length > 0) && (
-          <div class="pt-[var(--space-stack-lg)] border-t border-border w-full flex flex-col items-center gap-[var(--space-stack-md)]">
+          <div class={cn(
+            'pt-8 border-t w-full flex flex-col items-center gap-4',
+            background === 'invert' ? 'border-on-invert/10' : 'border-border'
+          )}>
             {showCopyright && (
-              <p class="text-sm text-foreground-muted" set:html={processedCopyright} />
+              <p class={cn(
+                'text-sm',
+                background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+              )}>
+                {processedCopyright}
+              </p>
             )}
             {legalLinks.length > 0 && (
-              <div class="flex items-center gap-[var(--space-inline-lg)]">
+              <div class="flex items-center gap-6">
                 {legalLinks.map((link) => (
                   <a
                     href={link.href}
-                    class="text-sm transition-colors text-foreground-muted hover:text-foreground"
+                    class={cn(
+                      'text-sm transition-colors',
+                      background === 'invert'
+                        ? 'text-on-invert/60 hover:text-on-invert'
+                        : 'text-foreground-muted hover:text-foreground'
+                    )}
                   >
                     {link.label}
                   </a>

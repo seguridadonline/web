@@ -9,21 +9,21 @@ export const headerVariants = cva('z-50', {
     },
     variant: {
       default: 'bg-background/80 backdrop-blur-lg border-b border-border/50',
-      solid: 'bg-background border-b border-border-strong',
+      solid: 'bg-background border-b border-border',
       transparent: 'bg-transparent',
     },
     shape: {
-      bar: 'w-full transition-[background,border-color,box-shadow,backdrop-filter] duration-300',
+      bar: 'w-full',
       floating: 'rounded-2xl transition-[background,border-color,box-shadow] duration-300',
     },
   },
   compoundVariants: [
     // Floating + fixed: centered with gap
-    { shape: 'floating', position: 'fixed', class: '!left-1/2 !right-auto -translate-x-1/2 w-[calc(100%-2rem)] max-w-6xl mt-4' },
+    { shape: 'floating', position: 'fixed', class: '!left-1/2 !right-auto -translate-x-1/2 w-[calc(100%-2rem)] max-w-4xl mt-4' },
     // Floating + sticky: centered with gap
-    { shape: 'floating', position: 'sticky', class: '!top-4 mx-auto max-w-6xl' },
+    { shape: 'floating', position: 'sticky', class: '!top-4 mx-auto max-w-4xl' },
     // Floating + static: centered
-    { shape: 'floating', position: 'static', class: 'mx-auto max-w-6xl' },
+    { shape: 'floating', position: 'static', class: 'mx-auto max-w-4xl' },
     // Floating + transparent: glass effect
     { shape: 'floating', variant: 'transparent', class: 'bg-white/[0.06] backdrop-blur-xl border border-white/[0.08]' },
     // Floating + default: semi-transparent with blur
@@ -39,7 +39,7 @@ export const headerVariants = cva('z-50', {
 });
 
 export const headerInnerVariants = cva(
-  'flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr]',
+  'flex items-center justify-between',
   {
     variants: {
       size: {

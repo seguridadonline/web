@@ -14,7 +14,7 @@ interface Props {
 }
 
 const {
-  command = 'npm create astro@latest',
+  command = 'npm create velocity-astro@latest',
   copiedText = 'Copied!',
   size = 'lg',
   class: className,
@@ -53,8 +53,7 @@ const sizes = {
 
 <script>
   function initCopyButtons() {
-    const npmCopyButtons = document.querySelectorAll<HTMLButtonElement>('[data-npm-copy]');
-    npmCopyButtons.forEach((button) => {
+    document.querySelectorAll<HTMLButtonElement>('[data-npm-copy]').forEach((button) => {
       if (button.dataset.initialized) return;
       button.dataset.initialized = 'true';
 
@@ -64,7 +63,7 @@ const sizes = {
 
       if (!copyIcon || !checkIcon || !commandText) return;
 
-      const command = button.dataset.command || 'npm create astro@latest';
+      const command = button.dataset.command || 'npm create velocity-astro@latest';
       const copiedText = button.dataset.copied || 'Copied!';
 
       button.addEventListener('click', async () => {

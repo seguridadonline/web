@@ -399,8 +399,7 @@ const defaultTab = tabs.find(t => t.id === defaultValue);
 
 <script>
   function initVerticalTabs() {
-    const vtabContainers = document.querySelectorAll<HTMLElement>('[data-vtabs]');
-    vtabContainers.forEach((container) => {
+    document.querySelectorAll<HTMLElement>('[data-vtabs]').forEach((container) => {
       if (container.dataset.vtabsInit) return;
       container.dataset.vtabsInit = 'true';
 
@@ -421,8 +420,6 @@ const defaultTab = tabs.find(t => t.id === defaultValue);
       const sheetOptions = container.querySelectorAll<HTMLButtonElement>('[data-vtab-sheet-option]');
 
       let isOpen = false;
-      let _currentActiveTab = defaultTab;
-
       // Initialize content panels
       contentElements.forEach((el) => {
         const tabId = el.getAttribute('data-tab-content');
@@ -583,8 +580,6 @@ const defaultTab = tabs.find(t => t.id === defaultValue);
       }
 
       function activateTab(id: string) {
-        _currentActiveTab = id;
-
         // Update desktop triggers
         triggers.forEach((trigger) => {
           const triggerId = trigger.getAttribute('data-vtab-trigger');

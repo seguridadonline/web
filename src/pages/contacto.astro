@@ -1,0 +1,178 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/ui/form/Button/Button.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+---
+
+<PageLayout
+  title="Contacto y Reportes | Seguridad Online"
+  description="Envía tu reporte de forma anónima y segura. Nuestro equipo humano analizará la infracción y actuará en consecuencia."
+>
+  <!-- Hero Section -->
+  <section class="py-16 md:py-24 bg-secondary/20 border-b border-border">
+    <div class="container mx-auto px-6 text-center max-w-3xl">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-500/10 text-brand-500 rounded-2xl mb-6">
+        <Icon name="mail" class="w-8 h-8" />
+      </div>
+      <h1 class="text-4xl font-extrabold text-foreground md:text-5xl tracking-tight mb-6">
+        Contacto y Reportes
+      </h1>
+      <p class="text-lg text-foreground-muted leading-relaxed">
+        Utiliza este formulario para enviarnos un reporte de infracción o para consultas generales. 
+        Todo proceso es <strong class="text-foreground">estrictamente confidencial y anónimo</strong>. 
+        Nuestro equipo humano revisará tu caso y te responderá lo antes posible.
+      </p>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
+        
+        <!-- Formulario (Izquierda) -->
+        <div class="lg:w-3/5">
+          <div class="bg-background border border-border rounded-3xl p-6 md:p-10 shadow-sm relative overflow-hidden">
+            <!-- Deco -->
+            <div class="absolute top-0 right-0 w-40 h-40 bg-brand-500/5 rounded-full blur-3xl -z-10"></div>
+            
+            <h2 class="text-2xl font-bold mb-8">Enviar un caso</h2>
+            
+            <!-- Asegúrate de cambiar el "action" a tu ruta de API para Resend -->
+            <form action="/api/send-email" method="POST" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nombre / Alias -->
+                <div class="space-y-2">
+                  <label for="nombre" class="text-sm font-semibold text-foreground">Nombre o Alias (Opcional)</label>
+                  <input 
+                    type="text" 
+                    id="nombre" 
+                    name="nombre" 
+                    placeholder="Ej. Usuario Anónimo"
+                    class="w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-colors"
+                  />
+                </div>
+                
+                <!-- Correo -->
+                <div class="space-y-2">
+                  <label for="email" class="text-sm font-semibold text-foreground">Correo Electrónico <span class="text-brand-500">*</span></label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    placeholder="tu@correo.com"
+                    class="w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-colors"
+                  />
+                  <p class="text-xs text-foreground-muted">Solo lo usaremos para responderte. No lo guardaremos.</p>
+                </div>
+              </div>
+
+              <!-- Asunto -->
+              <div class="space-y-2">
+                <label for="asunto" class="text-sm font-semibold text-foreground">Asunto del reporte <span class="text-brand-500">*</span></label>
+                <select 
+                  id="asunto" 
+                  name="asunto" 
+                  required
+                  class="w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-colors appearance-none"
+                >
+                  <option value="" disabled selected>Selecciona una opción...</option>
+                  <option value="contenido_inadecuado">Prevención: Contenido inadecuado en zonas de menores</option>
+                  <option value="phishing">Prácticas no éticas: Phishing o Estafas web</option>
+                  <option value="derechos_autor">Derechos de Autor: Propiedad intelectual copiada</option>
+                  <option value="consulta_general">Consulta general o duda sobre un reporte</option>
+                </select>
+              </div>
+
+              <!-- URL -->
+              <div class="space-y-2">
+                <label for="url" class="text-sm font-semibold text-foreground">Enlace a la infracción (Opcional pero recomendado)</label>
+                <input 
+                  type="url" 
+                  id="url" 
+                  name="url" 
+                  placeholder="https://ejemplo.com/enlace-al-problema"
+                  class="w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-colors"
+                />
+              </div>
+
+              <!-- Mensaje -->
+              <div class="space-y-2">
+                <label for="mensaje" class="text-sm font-semibold text-foreground">Detalles del caso <span class="text-brand-500">*</span></label>
+                <textarea 
+                  id="mensaje" 
+                  name="mensaje" 
+                  rows="5" 
+                  required
+                  placeholder="Describe brevemente la situación, dónde se encuentra el contenido y qué política crees que está infringiendo..."
+                  class="w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-colors resize-y"
+                ></textarea>
+              </div>
+
+              <div class="pt-2">
+                <Button type="submit" size="lg" class="w-full sm:w-auto px-10">
+                  Enviar Reporte
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Información Lateral (Derecha) -->
+        <div class="lg:w-2/5 space-y-10">
+          
+          <!-- Medios de contacto directos -->
+          <div>
+            <h3 class="text-xl font-bold mb-6">Otros medios de contacto</h3>
+            <div class="space-y-4">
+              <a href="mailto:reportes@seguridadonline.org" class="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-brand-500/50 hover:bg-secondary/20 transition-all group">
+                <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center group-hover:bg-brand-500/10 transition-colors">
+                  <Icon name="mail" class="w-5 h-5 text-foreground group-hover:text-brand-500" />
+                </div>
+                <div>
+                  <p class="text-sm text-foreground-muted font-medium mb-0.5">Vía Correo Electrónico</p>
+                  <p class="font-bold text-foreground">reportes@seguridadonline.org</p>
+                </div>
+              </a>
+              
+              <a href="https://x.com/sguridadonline" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-brand-500/50 hover:bg-secondary/20 transition-all group">
+                <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center group-hover:bg-brand-500/10 transition-colors">
+                  <Icon name="twitter" class="w-5 h-5 text-foreground group-hover:text-brand-500" />
+                </div>
+                <div>
+                  <p class="text-sm text-foreground-muted font-medium mb-0.5">Vía X (Twitter)</p>
+                  <p class="font-bold text-foreground">@sguridadonline</p>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Recordatorio de Normas -->
+          <div class="bg-secondary/30 p-6 rounded-2xl border border-border">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+              <Icon name="info" class="w-5 h-5 text-brand-500" />
+              Antes de enviar
+            </h3>
+            <ul class="space-y-3 text-sm text-foreground-muted leading-relaxed">
+              <li class="flex gap-2">
+                <Icon name="x" class="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                <span><strong>No recuperamos cuentas:</strong> Si te hackearon tu red social, debes usar el soporte oficial de esa plataforma.</span>
+              </li>
+              <li class="flex gap-2">
+                <Icon name="x" class="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                <span><strong>No atendemos crímenes severos:</strong> Ante un delito grave (venta de drogas, etc.), contacta a las autoridades policiales de tu país de inmediato.</span>
+              </li>
+              <li class="flex gap-2">
+                <Icon name="check" class="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />
+                <span><strong>Paciencia:</strong> Somos un equipo humano. Normalmente intercambiaremos un promedio de 3 correos contigo para darte el estado final de tu reporte.</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+</PageLayout>

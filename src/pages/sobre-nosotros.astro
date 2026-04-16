@@ -1,0 +1,132 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/ui/form/Button/Button.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+---
+
+<PageLayout
+  title="Sobre Nosotros | Seguridad Online"
+  description="Conoce la historia, misión y valores de Seguridad Online. Una organización independiente dedicada a hacer de internet un lugar más seguro."
+>
+  <!-- Hero Section (Relleno ajustado para evitar el espacio extra con el Header) -->
+  <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-border">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-brand-500/10 rounded-full blur-[100px] -z-10"></div>
+    
+    <div class="container mx-auto px-6 text-center z-10 relative max-w-4xl">
+      <h1 class="text-4xl font-extrabold text-foreground md:text-6xl tracking-tight mb-6">
+        Defensores del usuario.<br />
+        <span class="text-brand-500">Auditores de la red.</span>
+      </h1>
+      <p class="text-xl text-foreground-muted leading-relaxed max-w-3xl mx-auto">
+        Seguridad Online no es una red social ni un proveedor de internet. Somos una <strong>organización independiente</strong> formada por personas reales, dedicada a proteger a los usuarios frente al contenido peligroso y las prácticas poco éticas.
+      </p>
+    </div>
+  </section>
+
+  <!-- El Problema / Por qué nacimos -->
+  <section class="py-20 md:py-24">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-foreground text-sm font-semibold mb-6 border border-border">
+            <Icon name="flag" class="w-4 h-4 text-brand-500" />
+            Nuestro Origen
+          </div>
+          <h2 class="text-3xl font-bold md:text-4xl mb-6">El sistema de reporte tradicional está roto.</h2>
+          <div class="space-y-4 text-lg text-foreground-muted leading-relaxed">
+            <p>
+              Seguridad Online nació de una frustración compartida. Hoy en día, la mayoría de las redes sociales y proveedores de alojamiento utilizan Inteligencia Artificial para moderar su contenido.
+            </p>
+            <p>
+              El problema es que los infractores han aprendido "trucos" para burlar a las máquinas. Cuando un usuario normal intenta reportar un contenido peligroso —como material inadecuado expuesto a menores—, suele recibir una respuesta automática diciendo: <em>"No hemos encontrado ninguna infracción"</em>.
+            </p>
+            <p>
+              Sabemos que la gente no tiene el tiempo, ni los conocimientos técnicos para redactar apelaciones complejas. Por eso creamos esta organización: <strong>para actuar por ti.</strong>
+            </p>
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-secondary/30 p-8 rounded-3xl border border-border">
+            <Icon name="bot" class="w-8 h-8 text-foreground-muted mb-4" />
+            <h3 class="font-bold text-lg mb-2 text-foreground">Sistemas Automatizados</h3>
+            <p class="text-sm text-foreground-muted">Ignoran el contexto y son fácilmente evadidos por infractores experimentados.</p>
+          </div>
+          <div class="bg-brand-500/10 p-8 rounded-3xl border border-brand-500/20 sm:translate-y-8">
+            <Icon name="users" class="w-8 h-8 text-brand-500 mb-4" />
+            <h3 class="font-bold text-lg mb-2 text-brand-600 dark:text-brand-400">Análisis Humano</h3>
+            <p class="text-sm text-brand-700/80 dark:text-brand-300/80">Nosotros investigamos manualmente, uniendo las piezas que una IA jamás vería.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nuestros Valores (Grid) -->
+  <section class="py-24 bg-secondary/20 border-y border-border">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl font-bold md:text-4xl">Nuestros Pilares</h2>
+        <p class="mt-4 text-foreground-muted">Cómo trabajamos y qué defendemos al tomar cada uno de los casos.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-background p-8 rounded-2xl border border-border shadow-sm hover:border-brand-500/50 transition-colors">
+          <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mb-6">
+            <Icon name="eye-off" class="w-6 h-6 text-foreground" />
+          </div>
+          <h3 class="text-xl font-bold mb-3">Privacidad Absoluta</h3>
+          <p class="text-foreground-muted text-sm leading-relaxed">
+            Protegemos al usuario, no al infractor. Todo reporte es anónimo. No almacenamos tus datos ni los compartimos. Nosotros damos la cara frente al proveedor para que tú no tengas que exponerte.
+          </p>
+        </div>
+        
+        <div class="bg-background p-8 rounded-2xl border border-border shadow-sm hover:border-brand-500/50 transition-colors">
+          <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mb-6">
+            <Icon name="shield" class="w-6 h-6 text-foreground" />
+          </div>
+          <h3 class="text-xl font-bold mb-3">Protección Infantil</h3>
+          <p class="text-foreground-muted text-sm leading-relaxed">
+            Nuestra mayor prioridad es evitar que los menores sean expuestos o normalicen el contenido para adultos publicado indebidamente en plataformas de acceso general.
+          </p>
+        </div>
+
+        <div class="bg-background p-8 rounded-2xl border border-border shadow-sm hover:border-brand-500/50 transition-colors">
+          <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mb-6">
+            <Icon name="scale" class="w-6 h-6 text-foreground" />
+          </div>
+          <h3 class="text-xl font-bold mb-3">Objetividad Formal</h3>
+          <p class="text-foreground-muted text-sm leading-relaxed">
+            No actuamos por venganza personal ni odios. Emitimos avisos de cumplimiento formales, dando al usuario la oportunidad de retirar el contenido antes de perder el esfuerzo de su trabajo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Transparencia y Donaciones -->
+  <section class="py-24">
+    <div class="container mx-auto px-6 max-w-4xl text-center">
+      <div class="w-16 h-16 bg-brand-500/10 rounded-full flex items-center justify-center mx-auto mb-8">
+         <Icon name="heart-handshake" class="w-8 h-8 text-brand-500" />
+      </div>
+      <h2 class="text-3xl font-bold md:text-4xl mb-6">Financiados por la comunidad</h2>
+      <p class="text-lg text-foreground-muted mb-8 leading-relaxed">
+        Seguridad Online es una iniciativa independiente y sin fines de lucro. 
+        <strong>Nuestros servicios de auditoría y reporte son y siempre serán 100% gratuitos.</strong>
+      </p>
+      <p class="text-foreground-muted mb-10 leading-relaxed bg-secondary/30 p-6 rounded-2xl border border-border">
+        Nos mantenemos a flote gracias a las donaciones de personas que apoyan nuestra misión. Estos fondos no compran funciones "Premium" ni aceleran reportes; se utilizan exclusivamente para pagar el alojamiento web, el dominio institucional y para compensar el tiempo que nuestro equipo invierte en investigar a fondo cada caso.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <Button href="/donar" size="lg" class="w-full sm:w-auto px-8">
+          Apoyar nuestra labor
+        </Button>
+        <Button href="/contacto" variant="outline" size="lg" class="w-full sm:w-auto px-8">
+          Hacer un reporte
+        </Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>

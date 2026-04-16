@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/cn';
 import { cardVariants } from './card.variants';
 
-interface Props extends HTMLAttributes<'div'>, Pick<HTMLAttributes<'a'>, 'target' | 'rel'> {
+interface Props extends HTMLAttributes<'div'> {
   variant?: 'default' | 'solid' | 'outline' | 'ghost' | 'elevated';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   hover?: boolean;
@@ -23,7 +23,7 @@ const Element = href ? 'a' : 'div';
 
 const cardStyles = cn(
   cardVariants({ variant, padding, hover }),
-  href && 'block cursor-pointer',
+  href && 'block',
   className
 );
 ---

@@ -24,13 +24,6 @@ export interface SiteConfig {
     google?: string;
     bing?: string;
   };
-  /** Path to author photo (relative to site root, e.g. '/avatar.jpg'). Used in Person schema. */
-  authorImage?: string;
-  /**
-   * Set to false if your blog post images already match your theme color
-   * and you don't want the brand color overlay applied on top of them.
-   */
-  blogImageOverlay?: boolean;
   /**
    * Branding configuration
    * Logo files: Replace SVGs in src/assets/branding/
@@ -40,8 +33,6 @@ export interface SiteConfig {
     /** Logo alt text for accessibility */
     logo: {
       alt: string;
-      /** Path to logo image for structured data (e.g. '/logo.png'). Add a PNG to public/ and set this. */
-      imageUrl?: string;
     };
     /** Favicon path (lives in public/) */
     favicon: {
@@ -59,42 +50,35 @@ export interface SiteConfig {
 
 const siteConfig: SiteConfig = {
   name: 'Seguridad Online',
-  description:
-    'Iniciativa independiente de auditoría y reporte de seguridad digital.',
+  description: 'A modern website built with Astro and Tailwind CSS',
   url: SITE_URL || 'https://seguridadonline.org',
-  ogImage: '/og-default.svg',
+  ogImage: '/og-default.png',
   author: 'Organización de Seguridad Online',
+  // Demo contact info - replace with your actual business details
   email: 'info@seguridadonline.org',
-  address: {
-    street: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
-  },
   socialLinks: [
     'https://x.com/sguridadonline',
   ],
+  // Twitter metadata - update with your actual handles or remove
   twitter: {
-    site: 'https://x.com/sguridadonline',
+    site: '@sguridadonline',
     creator: '@sguridadonline',
   },
   verification: {
     google: GOOGLE_SITE_VERIFICATION,
     bing: BING_SITE_VERIFICATION,
   },
-  authorImage: '/avatar.svg',
-  blogImageOverlay: true,
+  // Branding: Logo files live in src/assets/branding/
+  // Replace the SVG files there with your own branding
   branding: {
     logo: {
       alt: 'Logo de Seguridad Online',
-      imageUrl: '/favicon.svg',
     },
     favicon: {
       svg: '/favicon.svg',
     },
     colors: {
-      themeColor: '#3b82f6',
+      themeColor: '#F94C10',
       backgroundColor: '#ffffff',
     },
   },

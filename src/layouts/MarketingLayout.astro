@@ -40,16 +40,25 @@ const {
 >
   <Header
     slot="header"
-    shape="bar"
-    variant="solid"
+    shape="floating"
+    variant="transparent"
     position="fixed"
-    colorScheme="default"
+    colorScheme="invert"
+    showCta={true}
+    cta={{ label: 'Get Started', href: '#get-started' }}
+    actions={[
+      {
+        icon: 'github',
+        href: 'https://github.com/southwellmedia/velocity',
+        label: 'GitHub',
+        iconOnly: true,
+        target: '_blank',
+      },
+    ]}
     showLanguageSwitcher={false}
-    showCta={false}
-    cta={{ label: 'Start a Project', href: '/contact' }}
   />
 
   <slot />
 
-  <Footer slot="footer" layout="simple" background="secondary" />
+  <Footer slot="footer" layout="simple" background="secondary" showCopyright={false} />
 </BaseLayout>

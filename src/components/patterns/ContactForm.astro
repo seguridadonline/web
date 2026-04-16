@@ -2,7 +2,6 @@
 import Input from '@/components/ui/form/Input/Input.astro';
 import Textarea from '@/components/ui/form/Textarea/Textarea.astro';
 import Button from '@/components/ui/form/Button/Button.astro';
-import Icon from '@/components/ui/primitives/Icon/Icon.astro';
 import { cn } from '@/lib/cn';
 
 interface Props {
@@ -25,23 +24,21 @@ const {
   class={cn('space-y-6', className)}
   data-success-message={successMessage}
 >
-  <!-- Name + Email side by side on sm+ -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <Input
-      label="Name"
-      name="name"
-      type="text"
-      required
-      autocomplete="name"
-    />
-    <Input
-      label="Email"
-      name="email"
-      type="email"
-      required
-      autocomplete="email"
-    />
-  </div>
+  <Input
+    label="Name"
+    name="name"
+    type="text"
+    required
+    autocomplete="name"
+  />
+
+  <Input
+    label="Email"
+    name="email"
+    type="email"
+    required
+    autocomplete="email"
+  />
 
   <Input
     label="Subject"
@@ -63,12 +60,9 @@ const {
 
   <div id="form-message" class="hidden text-sm"></div>
 
-  <div class="flex justify-center">
-    <Button type="submit" id="submit-button" class="gap-2">
-      Send message
-      <Icon name="arrow-right" size="sm" />
-    </Button>
-  </div>
+  <Button type="submit" fullWidth id="submit-button">
+    Submit
+  </Button>
 </form>
 
 <script>
@@ -85,7 +79,7 @@ const {
       e.preventDefault();
 
       button.disabled = true;
-      button.textContent = 'Sending…';
+      button.textContent = 'Sending...';
       message.classList.add('hidden');
 
       try {
@@ -113,7 +107,7 @@ const {
         message.className = 'text-sm text-destructive';
       } finally {
         button.disabled = false;
-        button.textContent = 'Send message';
+        button.textContent = 'Submit';
         message.classList.remove('hidden');
       }
     });

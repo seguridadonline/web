@@ -92,8 +92,7 @@ const iconMap: Record<string, string> = {
 
 <script>
   function initDropdowns() {
-    const dropdowns = document.querySelectorAll<HTMLElement>('[data-dropdown]');
-    dropdowns.forEach((dropdown) => {
+    document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((dropdown) => {
       if (dropdown.dataset.dropdownInit) return;
       dropdown.dataset.dropdownInit = 'true';
 

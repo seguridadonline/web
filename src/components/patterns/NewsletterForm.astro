@@ -46,7 +46,7 @@ const {
 
 <script>
   function initNewsletterForms() {
-    const forms = document.querySelectorAll<HTMLFormElement>('.newsletter-form');
+    const forms = document.querySelectorAll('.newsletter-form') as NodeListOf<HTMLFormElement>;
 
     forms.forEach((form) => {
       const button = form.querySelector('.newsletter-submit') as HTMLButtonElement;

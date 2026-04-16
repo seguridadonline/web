@@ -69,8 +69,7 @@ const codeId = `code-${Math.random().toString(36).slice(2, 9)}`;
 
 <script>
   function initCodeBlocks() {
-    const copyButtons = document.querySelectorAll<HTMLButtonElement>('.copy-button');
-    copyButtons.forEach((button) => {
+    document.querySelectorAll<HTMLButtonElement>('.copy-button').forEach((button) => {
       button.addEventListener('click', async () => {
         const codeId = button.dataset.codeId;
         if (!codeId) return;

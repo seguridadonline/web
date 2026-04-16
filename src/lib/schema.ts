@@ -1,12 +1,11 @@
 import type {
   WebSite,
   Organization,
-  Person,
-  LocalBusiness,
   BlogPosting,
   BreadcrumbList,
   FAQPage,
   WithContext,
+  SearchAction,
 } from 'schema-dts';
 import siteConfig from '@/config/site.config';
 
@@ -20,54 +19,18 @@ export function createWebsiteSchema(): WithContext<WebSite> {
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
-  };
-}
-
-/**
- * Create Person schema for Astro Rocket
- */
-export function createPersonSchema(): WithContext<Person> {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Astro Rocket',
-    jobTitle: 'Web Designer & Developer',
-    url: siteConfig.url,
-    email: siteConfig.email,
-    ...(siteConfig.authorImage ? { image: `${siteConfig.url}${siteConfig.authorImage}` } : {}),
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Veghel',
-      addressRegion: 'Noord-Brabant',
-      addressCountry: 'NL',
-    },
-    sameAs: siteConfig.socialLinks,
-  };
-}
-
-/**
- * Create ProfessionalService schema for local SEO
- */
-export function createProfessionalServiceSchema(): WithContext<LocalBusiness> {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService' as 'LocalBusiness',
-    name: siteConfig.name,
-    url: siteConfig.url,
-    email: siteConfig.email,
-    ...(siteConfig.phone ? { telephone: siteConfig.phone } : {}),
-    ...(siteConfig.authorImage ? { image: `${siteConfig.url}${siteConfig.authorImage}` } : {}),
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Veghel',
-      addressRegion: 'Noord-Brabant',
-      addressCountry: 'NL',
-    },
-    areaServed: [
-      { '@type': 'Country', name: 'Netherlands' },
-      { '@type': 'Country', name: 'Worldwide' },
-    ],
-    sameAs: siteConfig.socialLinks,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteConfig.url}/search?q={search_term_string}`,
+      },
+      'query-input': {
+        '@type': 'PropertyValueSpecification',
+        valueRequired: true,
+        valueName: 'search_term_string',
+      },
+    } as SearchAction,
   };
 }
 
@@ -75,15 +38,12 @@ export function createProfessionalServiceSchema(): WithContext<LocalBusiness> {
  * Create Organization schema
  */
 export function createOrganizationSchema(): WithContext<Organization> {
-  const logoUrl = siteConfig.branding.logo.imageUrl
-    ? `${siteConfig.url}${siteConfig.branding.logo.imageUrl}`
-    : undefined;
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteConfig.name,
     url: siteConfig.url,
-    ...(logoUrl ? { logo: logoUrl } : {}),
+    logo: `${siteConfig.url}/logo.png`,
     sameAs: siteConfig.socialLinks,
     contactPoint: siteConfig.phone
       ? {
@@ -124,14 +84,10 @@ export function createBlogPostSchema(post: {
     publisher: {
       '@type': 'Organization',
       name: siteConfig.name,
-      ...(siteConfig.branding.logo.imageUrl
-        ? {
-            logo: {
-              '@type': 'ImageObject',
-              url: `${siteConfig.url}${siteConfig.branding.logo.imageUrl}`,
-            },
-          }
-        : {}),
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteConfig.url}/logo.png`,
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',

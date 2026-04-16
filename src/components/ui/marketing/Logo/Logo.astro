@@ -1,54 +1,72 @@
 ---
 /**
- * Logo Component — first-letter monogram badge
+ * Logo Component
  *
- * Renders a brand-coloured square badge with the first letter of the site
- * name, used in the navbar, footer, and blog post bylines.
+ * To customize: Replace the SVG files in src/assets/branding/
+ * - logomark.svg       → Icon for light backgrounds
+ * - logomark-dark.svg  → Icon for dark backgrounds
+ * - logo-full.svg      → Full logo for light backgrounds
+ * - logo-full-dark.svg → Full logo for dark backgrounds
  */
-import { cn } from '@/lib/cn';
 import siteConfig from '@/config/site.config';
+
+import logomark from '@/assets/branding/logomark.svg';
+import logomarkDark from '@/assets/branding/logomark-dark.svg';
+import logoFull from '@/assets/branding/logo-full.svg';
+import logoFullDark from '@/assets/branding/logo-full-dark.svg';
 
 interface Props {
   /** Size preset */
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  /** Force dark mode logo (for dark backgrounds) — no-op here, kept for API compat */
+  /** Force dark mode logo (for dark backgrounds) */
   forceDark?: boolean;
-  /** Use full logo instead of logomark — no-op here, kept for API compat */
+  /** Use full logo instead of logomark */
   variant?: 'logomark' | 'full';
   /** Additional CSS classes */
   class?: string;
-  /** Override the displayed letter (e.g. for author avatars). Defaults to first letter of site name. */
-  letter?: string;
 }
 
 const {
   size = 'md',
+  forceDark = false,
+  variant = 'logomark',
   class: className,
-  letter: letterProp,
 } = Astro.props;
 
-const sizeClasses: Record<string, { box: string; text: string; radius: string }> = {
-  sm:    { box: 'w-5 h-5',   text: 'text-[14px]', radius: 'rounded-[4px]' },
-  md:    { box: 'w-6 h-6',   text: 'text-[16px]', radius: 'rounded-[5px]' },
-  lg:    { box: 'w-8 h-8',   text: 'text-[22px]', radius: 'rounded-[6px]' },
-  xl:    { box: 'w-12 h-12', text: 'text-[34px]', radius: 'rounded-[8px]' },
-  '2xl': { box: 'w-24 h-24', text: 'text-[68px]', radius: 'rounded-[14px]' },
+const lightLogo = variant === 'full' ? logoFull : logomark;
+const darkLogo = variant === 'full' ? logoFullDark : logomarkDark;
+
+const sizeClasses: Record<string, string> = {
+  sm: 'h-5 w-5',
+  md: 'h-6 w-6',
+  lg: 'h-8 w-8',
+  xl: 'h-12 w-12',
+  '2xl': 'h-24 w-24',
 };
 
-const { box, text, radius } = sizeClasses[size] ?? sizeClasses.md;
-const letter = letterProp ?? siteConfig.name.charAt(0).toUpperCase();
+const sizeClass = sizeClasses[size] || sizeClasses.md;
 ---
 
-<span
-  class={cn(
-    'inline-flex items-center justify-center shrink-0',
-    'bg-brand-500 text-white',
-    'font-display font-bold leading-none select-none',
-    box, text, radius,
-    className
+<span class:list={['inline-block', className]}>
+  {forceDark ? (
+    <img
+      src={darkLogo.src}
+      alt={siteConfig.branding.logo.alt}
+      class:list={[sizeClass]}
+    />
+  ) : (
+    <Fragment>
+      <img
+        src={lightLogo.src}
+        alt={siteConfig.branding.logo.alt}
+        class:list={[sizeClass, 'block dark:hidden']}
+      />
+      <img
+        src={darkLogo.src}
+        alt=""
+        class:list={[sizeClass, 'hidden dark:block']}
+        aria-hidden="true"
+      />
+    </Fragment>
   )}
-  aria-label={siteConfig.branding.logo.alt}
-  role="img"
->
-  {letter}
 </span>

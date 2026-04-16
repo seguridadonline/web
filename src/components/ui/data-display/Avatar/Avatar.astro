@@ -46,8 +46,7 @@ const initials = fallback || alt
 
 <script>
   function initAvatarFallbacks() {
-    const avatarImgs = document.querySelectorAll<HTMLImageElement>('[data-avatar-img]');
-    avatarImgs.forEach((img) => {
+    document.querySelectorAll<HTMLImageElement>('[data-avatar-img]').forEach((img) => {
       if (img.dataset.avatarInit) return;
       img.dataset.avatarInit = 'true';
 

@@ -9,23 +9,20 @@ interface Props extends HTMLAttributes<'section'> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   /** Max width of content */
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl';
-  /** Show decorative radial glow */
-  glow?: boolean;
 }
 
 const {
   variant = 'default',
   size = 'lg',
   maxWidth = 'lg',
-  glow = true,
   id,
   class: className,
   ...attrs
 } = Astro.props;
 
 const sectionStyles = {
-  default: 'bg-background border-t border-border',
-  invert: 'invert-section bg-background text-foreground border-t border-border',
+  default: 'bg-background',
+  invert: 'invert-section bg-background text-foreground',
 };
 
 const sizes = {
@@ -50,17 +47,11 @@ const hasActionsSlot = Astro.slots.has('actions');
 
 <section
   id={id}
-  class={cn('relative overflow-hidden', sectionStyles[variant], sizes[size], className)}
+  class={cn(sectionStyles[variant], sizes[size], className)}
   {...attrs}
 >
-  {glow && (
-    <div
-      class="pointer-events-none absolute inset-0"
-      style="background: radial-gradient(ellipse 80% 80% at 50% 50%, color-mix(in oklch, var(--color-brand-500) 10%, transparent) 0%, transparent 70%);"
-      aria-hidden="true"
-    />
-  )}
-    <div class={cn(maxWidths[maxWidth], 'relative z-10 text-center mx-auto')}>
+  <div class="mx-auto max-w-6xl px-6">
+    <div class={cn(maxWidths[maxWidth], 'text-center mx-auto')}>
       {/* Logo Slot - renders before heading */}
       {hasLogoSlot && (
         <div class="mb-[var(--space-stack-lg)]">
@@ -100,4 +91,5 @@ const hasActionsSlot = Astro.slots.has('actions');
       {/* Default slot for additional content */}
       <slot />
     </div>
+  </div>
 </section>
