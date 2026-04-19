@@ -1,60 +1,54 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
-import { getCollection } from 'astro:content';
 import { generateOGImage } from '@/lib/og';
-import siteConfig from '@/config/site.config';
-
-// Define static pages that need OG images
-const STATIC_PAGES = [
-  { slug: 'index', title: siteConfig.name, description: siteConfig.description },
-  { slug: 'about', title: 'About', description: `Learn more about ${siteConfig.name}` },
-  { slug: 'contact', title: 'Contact', description: `Get in touch with ${siteConfig.name}` },
-  { slug: 'blog', title: 'Blog', description: `Latest articles and updates from ${siteConfig.name}` },
-  { slug: 'components', title: 'Component Library', description: 'UI component showcase' },
-];
+import { routes, footerRoutes } from '@/i18n/routes';
+import { locales, defaultLocale } from '@/i18n/config';
+import { getTranslations } from '@/i18n';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // Get all blog posts
-  const blogPosts = await getCollection('blog', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const paths = [];
+  const allRouteDefinitions = { ...routes, ...footerRoutes };
 
-  // Generate paths for blog posts
-  const blogPaths = blogPosts.map((post) => ({
-    params: { slug: `blog/${post.id}` },
-    props: {
-      title: post.data.title,
-      description: post.data.description,
-      type: 'article' as const,
-    },
-  }));
+  for (const locale of locales) {
+    const translations = getTranslations(locale as any) as any;
 
-  // Generate paths for static pages
-  const staticPaths = STATIC_PAGES.map((page) => ({
-    params: { slug: page.slug },
-    props: {
-      title: page.title,
-      description: page.description,
-      type: 'website' as const,
-    },
-  }));
+    for (const [routeId, definition] of Object.entries(allRouteDefinitions)) {
+      // Obtenemos el slug traducido para la URL del recurso
+      const slugValue = definition[locale as keyof typeof definition] as string;
+      
+      // Construimos el path de la imagen: "es/index", "fr/a-propos", etc.
+      // Si es el idioma por defecto y el slug es vacío (home), usamos 'index'
+      const langPrefix = locale === defaultLocale ? '' : `${locale}/`;
+      const finalSlug = slugValue === '' ? `${locale}/index` : `${langPrefix}${slugValue}`;
 
-  return [...staticPaths, ...blogPaths];
+      // Intentamos sacar título y descripción del diccionario i18n
+      // Buscamos en translations[routeId].meta.title
+      const meta = translations[routeId]?.meta || {};
+      
+      paths.push({
+        params: { slug: finalSlug },
+        props: {
+          title: meta.title || 'Seguridad Online',
+          description: meta.description || '',
+        },
+      });
+    }
+  }
+
+  return paths;
 };
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title, description, type } = props as {
+  const { title, description } = props as {
     title: string;
     description?: string;
-    type: 'website' | 'article';
   };
 
   const png = await generateOGImage({
     title,
     description,
-    type,
+    type: 'website',
   });
 
-  // Convert Buffer to Uint8Array for Response compatibility
   return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',

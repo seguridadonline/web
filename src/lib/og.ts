@@ -11,10 +11,7 @@ export interface OGImageOptions {
   type?: 'website' | 'article';
 }
 
-// Load Inter font for OG images (Satori requires TTF/OTF, not WOFF2)
-// Bundled locally in public/fonts/ to avoid CDN dependency during builds
 let fontCache: ArrayBuffer | null = null;
-
 function loadFont(): ArrayBuffer {
   if (!fontCache) {
     const fontPath = resolve(process.cwd(), 'public/fonts/inter-latin-400-normal.ttf');
@@ -25,77 +22,86 @@ function loadFont(): ArrayBuffer {
 
 export async function generateOGImage(options: OGImageOptions): Promise<Buffer> {
   const { title, description, type = 'website' } = options;
-
   const fontData = loadFont();
 
+  // Descripción un poco más corta para el nuevo diseño central
   const truncatedDescription = description
-    ? description.length > 120
-      ? description.slice(0, 117) + '...'
-      : description
+    ? description.length > 100 ? description.slice(0, 97) + '...' : description
     : '';
 
-  // Create the OG image markup using satori-html
-  // Note: All divs must have explicit display property for Satori
-  // HTML elements must be in the template literal, not interpolated as strings
   const markup = html`
-    <div style="height: 100%; width: 100%; display: flex; flex-direction: column; background: linear-gradient(135deg, #18181b 0%, #27272a 50%, #18181b 100%); padding: 60px 80px; font-family: 'Inter'; position: relative;">
-      <div style="display: flex; position: absolute; top: 0; left: 0; width: 8px; height: 100%; background: linear-gradient(180deg, #f97316 0%, #fb923c 50%, #f97316 100%);"></div>
-      <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding-left: 20px;">
-        <div style="display: flex; align-items: center;">
-          <div style="display: flex; padding: 8px 16px; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 9999px; color: #fb923c; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">${type === 'article' ? 'Article' : 'Page'}</div>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 24px;">
-          <div style="display: flex; font-size: ${title.length > 50 ? '48px' : '64px'}; font-weight: 700; color: #fafafa; line-height: 1.2; letter-spacing: -0.02em;">${title}</div>
-          <div style="display: ${truncatedDescription ? 'flex' : 'none'}; font-size: 24px; color: #a1a1aa; line-height: 1.5; max-width: 800px;">${truncatedDescription}</div>
-        </div>
-        <div style="display: flex; align-items: center; justify-content: space-between;">
+    <div style="height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; background-color: #030712; font-family: 'Inter'; position: relative; color: #fafafa; padding: 0; margin: 0; overflow: hidden;">
+      
+      <div style="display: flex; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(#1f2937 1px, transparent 1px); background-size: 32px 32px; opacity: 0.3;"></div>
+      
+      <div style="display: flex; position: absolute; bottom: -150px; left: -100px; width: 600px; height: 600px; background: rgba(0, 140, 255, 0.12); border-radius: 600px; filter: blur(120px);"></div>
+      <div style="display: flex; position: absolute; top: -100px; right: -50px; width: 400px; height: 400px; background: rgba(0, 140, 255, 0.08); border-radius: 400px; filter: blur(100px);"></div>
+
+      <div style="display: flex; flex-direction: column; width: 1000px; height: 500px; background: rgba(17, 24, 39, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 32px; padding: 60px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+        
+        <div style="display: flex; position: absolute; top: 0; left: 60px; right: 60px; height: 1px; background: linear-gradient(90deg, transparent, rgba(0, 140, 255, 0.4), transparent);"></div>
+
+        <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; gap: 24px;">
+          
           <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); border-radius: 12px;">
-              <span style="font-size: 24px; font-weight: 700; color: #18181b;">V</span>
+            <div style="display: flex; padding: 6px 14px; background: rgba(0, 140, 255, 0.08); border: 1px solid rgba(0, 140, 255, 0.2); border-radius: 99px; color: #38bdf8; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em;">
+              ${type === 'article' ? 'Artículo' : 'Página'}
             </div>
-            <span style="font-size: 20px; font-weight: 600; color: #fafafa;">${siteConfig.name}</span>
+            <div style="display: flex; width: 40px; height: 1px; background-color: rgba(255, 255, 255, 0.1);"></div>
           </div>
-          <span style="font-size: 16px; color: #71717a;">${new URL(siteConfig.url).hostname}</span>
+
+          <div style="display: flex; font-size: ${title.length > 35 ? '64px' : '76px'}; font-weight: 800; color: #ffffff; line-height: 1.1; letter-spacing: -0.05em; background: linear-gradient(180deg, #ffffff 50%, #d1d5db 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">
+            ${title}
+          </div>
+
+          <div style="display: ${truncatedDescription ? 'flex' : 'none'}; font-size: 26px; color: #9ca3af; line-height: 1.5; max-width: 800px; font-weight: 400; letter-spacing: -0.01em;">
+            ${truncatedDescription}
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 16px; padding: 20px 24px; margin-top: auto;">
+          
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="display: flex; width: 48px; height: 48px; align-items: center; justify-content: center; background: rgba(0, 140, 255, 0.1); border: 1px solid rgba(0, 140, 255, 0.3); border-radius: 12px; box-shadow: 0 0 15px rgba(0, 140, 255, 0.1);">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32.19" height="40" viewBox="0 0 1031.34 1222.18" preserveAspectRatio="xMidYMid meet">
+	<defs>
+		<mask id="mask_1" mask-type="alpha">
+			<path d="M-519,-413.73 L1529,-413.73 L1529,1634.27 L-519,1634.27 L-519,-413.73 Z" fill-rule="evenodd" style="fill:white;"/>
+		</mask>
+	</defs>
+	<g id="Grupo2">
+		<g mask="url(#mask_1)">
+			<path d="M499,1221.02 C481.94,1217.71 470.04,1212.77 424.68,1190.15 C212.53,1084.39 78.01,951.2 26.04,795.47 C6.98,738.36 0.33,696.98 0.14,634.27 C-0.02,584.36 -0.49,585.11 16.96,607.07 C60.86,662.3 125.18,708.22 222,753.43 C321.37,799.83 478.37,830.91 566,821.52 C640.78,813.51 697.01,784.89 718.91,743.68 C725.52,731.25 724.83,731.11 700.84,740.09 C681.93,747.18 670.06,750.59 637,758.47 C618.46,762.89 565.43,761.85 545.45,756.67 C514.88,748.75 490.77,734.05 460.84,705.05 C440.95,685.79 438.75,684.74 413.16,682.25 C240.75,665.5 52.02,545.65 10.06,426.27 C-0.16,397.17 0,399.35 0,293.27 C0,189.62 -0.17,192.13 8.22,173.01 C18.43,149.73 41.88,134.82 88,122.28 C91.3,121.39 107.5,116.43 124,111.26 C140.5,106.09 156.7,101.15 160,100.29 C163.3,99.42 176.8,95.36 190,91.26 C203.2,87.15 215.8,83.38 218,82.87 C220.2,82.36 223.8,81.22 226,80.33 C228.2,79.45 234.05,77.62 239,76.27 C243.95,74.92 250.25,73.08 253,72.2 C255.75,71.31 266.1,68.18 276,65.24 C285.9,62.31 296.25,59.19 299,58.32 C301.75,57.45 307.6,55.75 312,54.53 C316.4,53.32 329.9,49.22 342,45.43 C367.37,37.47 383.46,32.59 392,30.27 C395.3,29.37 411.95,24.43 429,19.27 C446.05,14.12 462.7,9.17 466,8.26 C469.3,7.36 477.4,5.13 484,3.31 C491.47,1.25 503.56,0 516,0 C528.44,0 540.53,1.25 548,3.31 C554.6,5.13 562.7,7.36 566,8.26 C569.3,9.16 579.65,12.31 589,15.25 C613.69,23.02 631.16,28.37 638,30.26 C643.6,31.8 689.47,45.56 719,54.56 C726.15,56.74 736.05,59.72 741,61.18 C745.95,62.65 759.45,66.72 771,70.22 C782.55,73.73 794.7,77.34 798,78.25 C801.3,79.16 811.65,82.31 821,85.25 C848.21,93.82 862.91,98.29 880,103.21 C928.15,117.05 979.2,133.4 987.76,137.7 C1056.89,172.45 1041.48,287.45 957.79,361.34 C949.11,369 941.55,375.78 941,376.4 C935.4,382.73 897.78,407.66 871,422.81 C826.28,448.1 763.14,472.55 710,485.17 C669.42,494.8 660.84,497.36 648,503.7 C633.85,510.69 621.3,519.37 600.73,536.39 C519.2,603.87 436.71,613.14 312,568.85 C264.57,552 248.65,542.58 241.56,527.13 C218.76,477.47 219.44,408.25 242.96,383.98 C259.59,366.81 272.97,366.56 313,382.65 C363.73,403.04 407.64,414.21 425.36,411.21 C436.65,409.31 436.26,407.96 420.46,394.13 C384.25,362.44 373.46,339.76 384.02,317.51 C392.64,299.36 403.39,300.54 438.03,323.47 C497.98,363.15 541.11,377.02 605,377.16 C635.12,377.23 645.81,376.24 682,370 C788.01,351.73 890.56,300.03 919.49,250.27 C930.94,230.58 928.76,224.88 907.17,218.09 C890.83,212.94 836.12,196.53 828,194.34 C824.7,193.45 811.2,189.37 798,185.27 C768.14,176.01 749.78,170.44 742,168.27 C738.7,167.35 723.85,162.89 709,158.35 C694.15,153.81 674.8,147.91 666,145.25 C657.2,142.59 639.2,137.13 626,133.12 C612.8,129.11 599.3,125.13 596,124.28 C592.7,123.43 588.65,122.27 587,121.7 C583.83,120.6 540.99,107.54 528.82,103.96 C521.13,101.69 506.39,102.52 495,105.85 C491.15,106.98 480.35,110.32 471,113.27 C454.62,118.45 450.22,119.76 435,124 C431.15,125.07 421.7,127.89 414,130.27 C406.3,132.65 392.8,136.69 384,139.25 C375.2,141.8 354.95,147.95 339,152.92 C310.22,161.87 299.54,165.07 288,168.21 C284.7,169.11 265.35,174.97 245,181.25 C224.65,187.52 205.3,193.39 202,194.3 C198.7,195.2 189.7,197.88 182,200.24 C174.3,202.61 161.7,206.34 154,208.54 C126.82,216.3 110.39,222.21 106.72,225.53 C103.17,228.74 103,234.56 103,351.35 C103,473.8 103,473.8 121.79,491.76 C175.05,542.68 243.41,582.16 320,606.24 C348.89,615.32 366.04,619.53 393,624.14 C428.19,630.17 477.59,630.19 495.8,624.18 C498.99,623.13 503.56,622.27 505.97,622.27 C519.58,622.27 564.31,602.3 590.55,584.5 C623.89,561.88 629.72,560.09 640.49,569.16 C662.27,587.47 649.62,622.75 609.98,654.29 C594.93,666.26 593.62,670.15 604.5,670.54 C635.35,671.65 664.73,664.43 718.6,642.5 C780.52,617.3 805.47,636.8 805.52,710.43 C805.6,810.95 741.41,887.72 638,910.78 C630.3,912.5 619.05,914.93 613,916.18 C595.77,919.74 519.9,921.09 488,918.39 C379.44,909.23 275.95,880.04 181.29,831.89 C142.3,812.06 144.12,811.58 159.5,837.6 C214.6,930.83 312.25,1014.58 449,1085.88 C516.88,1121.27 510.32,1120.58 558.17,1097.38 C800.59,979.84 921.61,827.66 928.06,632.27 C929.6,585.35 931.24,587.28 901.79,601.3 C865.44,618.61 847.27,626.13 828.33,631.74 C825.74,632.51 821.05,629.33 812.33,620.9 C798.5,607.51 793.34,603.98 782.5,600.42 C770.77,596.58 773.42,593.76 795.5,586.56 C806.78,582.88 818.7,578.72 822,577.31 C825.3,575.9 831.15,573.58 835,572.16 C897.77,549.02 975.71,497.34 1011.42,455.19 C1019.3,445.89 1026.99,438.27 1028.52,438.27 C1032.22,438.27 1031.04,679.15 1027.22,701.27 C1017.64,756.93 1007.14,793.72 988.41,837.27 C931.85,968.83 797.8,1093.76 613,1187.15 C555.36,1216.27 523.43,1225.76 499,1221.02 Z" style="fill:#FFFFFF;"/>
+		</g>
+	</g>
+</svg>
+              </div>
+            
+            <div style="display: flex; flex-direction: column;">
+              <div style="display: flex; font-size: 22px; font-weight: 700; color: #ffffff; letter-spacing: -0.02em;">${siteConfig.name}</div>
+              <div style="display: flex; font-size: 15px; color: #38bdf8; font-weight: 500; letter-spacing: 0.02em;">${new URL(siteConfig.url).hostname}</div>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; padding: 8px 16px; background-color: rgba(255, 255, 255, 0.03); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <div style="display: flex; width: 8px; height: 8px; border-radius: 4px; background-color: #38bdf8; box-shadow: 0 0 10px #008cff;"></div>
+            <div style="display: flex; font-size: 14px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500;">Verificado</div>
+          </div>
         </div>
       </div>
     </div>
   `;
 
-  // Generate SVG with satori
-  // @ts-expect-error satori-html VNode is compatible with satori
   const svg = await satori(markup, {
     width: 1200,
     height: 630,
     fonts: [
-      {
-        name: 'Inter',
-        data: fontData,
-        weight: 400,
-        style: 'normal',
-      },
-      {
-        name: 'Inter',
-        data: fontData,
-        weight: 500,
-        style: 'normal',
-      },
-      {
-        name: 'Inter',
-        data: fontData,
-        weight: 600,
-        style: 'normal',
-      },
-      {
-        name: 'Inter',
-        data: fontData,
-        weight: 700,
-        style: 'normal',
-      },
+      { name: 'Inter', data: fontData, weight: 400, style: 'normal' },
+      { name: 'Inter', data: fontData, weight: 600, style: 'normal' },
+      { name: 'Inter', data: fontData, weight: 700, style: 'normal' },
+      { name: 'Inter', data: fontData, weight: 800, style: 'normal' },
     ],
   });
 
-  // Convert SVG to PNG
-  return Buffer.from(
-    await sharp(Buffer.from(svg)).resize(1200).png().toBuffer()
-  );
+  return Buffer.from(await sharp(Buffer.from(svg)).png().toBuffer());
 }
