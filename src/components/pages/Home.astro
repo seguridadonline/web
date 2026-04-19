@@ -1,0 +1,223 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/ui/form/Button/Button.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+
+import { getLocaleFromPath } from '@/i18n/config';
+
+import { es } from '@/i18n/translations/es.ts';
+import { en } from '@/i18n/translations/en.ts';
+import { fr } from '@/i18n/translations/fr.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+
+const dictionaries: Record<string, any> = { es, en, fr };
+const currentLang = dictionaries[locale] || dictionaries.es;
+
+const homeData = currentLang.home;
+
+const heroIcons = ["shield-check", "users", "file-text"];
+const coverageIcons = ["eye-off", "lock", "copyright"];
+const whyUsIcons = ["search", "alert-circle", "check-circle"];
+const whyUsMailIcons = ["mail", "help-circle", "gavel"];
+const processIcons = ["inbox", "activity", "user-search", "send", "clock", "shield-alert"];
+---
+
+<PageLayout
+  title={homeData.meta.title}
+  description={homeData.meta.description}
+>
+  <!-- HERO SECTION -->
+  <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-border">
+    <!-- Fondos desenfocados modernos -->
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[30rem] h-[30rem] bg-brand-500/10 rounded-full blur-[100px] -z-10"></div>
+    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[20rem] h-[20rem] bg-brand-400/10 rounded-full blur-[100px] -z-10"></div>
+    
+    <div class="container mx-auto px-6 text-center z-10 relative">
+      
+      <!-- Badge estilo Cloudflare/Minimalista -->
+      <div class="flex justify-center mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-foreground text-sm font-semibold border border-border shadow-sm">
+          <Icon name="shield" class="w-4 h-4 text-brand-500" />
+          {homeData.hero.badge}
+        </div>
+      </div>
+      
+      <!-- Título reducido y con mayor max-width para evitar saltos de línea feos en francés -->
+      <h1 class="text-3xl font-extrabold tracking-tight md:text-5xl lg:text-[3.25rem] max-w-5xl mx-auto leading-tight text-foreground">
+        {homeData.hero.titleStart} <span class="text-brand-500">{homeData.hero.titleHighlight}</span>{homeData.hero.titleEnd}
+      </h1>
+      
+      <p class="mt-6 text-lg md:text-xl text-foreground-muted max-w-3xl mx-auto leading-relaxed">
+        {homeData.hero.description}
+      </p>
+      
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Button size="lg" href="/contacto" class="w-full sm:w-auto text-lg px-8 shadow-sm">
+          {homeData.hero.btnPrimary}
+        </Button>
+        <Button size="lg" variant="outline" href="#como-trabajamos" class="w-full sm:w-auto text-lg px-8 bg-background">
+          {homeData.hero.btnSecondary}
+        </Button>
+      </div>
+
+      <div class="mt-14 flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-foreground-muted font-medium">
+        {homeData.hero.features.map((feature: string, idx: number) => (
+          <div class="flex items-center gap-2">
+            <Icon name={heroIcons[idx]} class="w-5 h-5 text-brand-500 shrink-0" /> 
+            <span>{feature}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- LO QUE ABARCAMOS -->
+  <section class="py-20 bg-secondary/10">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground">{homeData.coverage.title}</h2>
+        <p class="mt-4 text-foreground-muted text-lg">{homeData.coverage.description}</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+        {homeData.coverage.items.map((item: any, idx: number) => (
+          <div class="bg-background p-8 rounded-2xl border border-border shadow-sm hover:border-brand-500/30 transition-colors">
+            <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mb-6">
+              <Icon name={coverageIcons[idx]} class="w-6 h-6 text-brand-500" />
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-foreground">{item.title}</h3>
+            <p class="text-foreground-muted leading-relaxed">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUÉ ELEGIRNOS -->
+  <section class="py-24 border-t border-border">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2">
+          <h2 class="text-2xl md:text-3xl font-bold mb-6 text-foreground">{homeData.whyUs.title}</h2>
+          <p class="text-lg text-foreground-muted mb-10 leading-relaxed" set:html={homeData.whyUs.description}></p>
+          <ul class="space-y-8">
+            {homeData.whyUs.items.map((item: any, idx: number) => (
+              <li class="flex items-start gap-4">
+                <div class="mt-1 w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+                  <Icon name={whyUsIcons[idx]} class="w-5 h-5 text-brand-500" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-foreground mb-1">{item.title}</h4>
+                  <p class="text-foreground-muted leading-relaxed">{item.description}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <div class="lg:w-1/2 bg-secondary/30 rounded-3xl p-8 md:p-12 border border-border relative overflow-hidden shadow-sm">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-brand-500/5 rounded-full blur-[60px]"></div>
+          <h3 class="text-xl md:text-2xl font-bold mb-4 font-mono text-foreground">{homeData.whyUs.sidebar.title}</h3>
+          <p class="text-foreground-muted mb-8 leading-relaxed">{homeData.whyUs.sidebar.description}</p>
+          <div class="space-y-4 font-mono text-sm">
+            {homeData.whyUs.sidebar.mails.map((mail: any, idx: number) => (
+              <div class="bg-background p-4 rounded-xl border border-border flex gap-4 items-center shadow-sm">
+                <Icon name={whyUsMailIcons[idx]} class="w-5 h-5 text-brand-500 shrink-0" />
+                <p class="text-foreground-muted leading-relaxed">
+                  <strong class="text-foreground">{mail.title}</strong> {mail.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EL PROCESO DE 6 PASOS -->
+  <section id="como-trabajamos" class="py-24 bg-secondary/10 border-y border-border">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground">{homeData.process.title}</h2>
+        <p class="mt-4 text-foreground-muted text-lg">{homeData.process.description}</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {homeData.process.items.map((item: any, idx: number) => (
+          <div class="p-8 bg-background border border-border rounded-2xl relative overflow-hidden group hover:border-brand-500/40 transition-colors shadow-sm">
+            <div class="absolute -right-2 -top-4 text-8xl font-black text-secondary group-hover:text-brand-500/5 transition-colors z-0 select-none">
+              {item.step}
+            </div>
+            <div class="w-10 h-10 rounded-lg bg-brand-500/10 flex items-center justify-center mb-5 relative z-10">
+              <Icon name={processIcons[idx]} class="w-5 h-5 text-brand-500" />
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-foreground relative z-10">{item.title}</h3>
+            <p class="text-foreground-muted leading-relaxed relative z-10">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24">
+    <div class="container mx-auto px-6 max-w-3xl">
+      <div class="text-center mb-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground">{homeData.faq.title}</h2>
+        <p class="mt-4 text-foreground-muted text-lg">{homeData.faq.description}</p>
+      </div>
+      
+      <div class="space-y-4">
+        {homeData.faq.items.map((item: any) => (
+          <details class="group bg-background border border-border rounded-xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 font-bold hover:bg-secondary/30 transition-colors">
+              <span class="text-base md:text-lg text-foreground leading-tight">{item.q}</span>
+              <span class="shrink-0 rounded-full bg-secondary text-foreground-muted p-2 group-open:-rotate-180 transition-transform duration-300">
+                <Icon name="chevron-down" class="w-5 h-5" />
+              </span>
+            </summary>
+            <!-- Despegado: pt-5 en lugar de pt-0, con un padding interno amigable -->
+            <div class="p-6 pt-5 text-foreground-muted leading-relaxed border-t border-border bg-secondary/5">
+              <p class="mt-1">{item.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- DONACIONES -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <div class="bg-secondary/20 border border-border p-8 md:p-16 rounded-3xl text-center shadow-sm relative overflow-hidden">
+        
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-500/5 blur-[80px] -z-10"></div>
+
+        <div class="w-16 h-16 bg-background rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm border border-border">
+           <Icon name="heart-handshake" class="w-8 h-8 text-brand-500" />
+        </div>
+
+        <h2 class="text-2xl md:text-4xl font-bold mb-6 text-foreground">{homeData.donations.title}</h2>
+        
+        <p class="text-base md:text-lg text-foreground-muted mb-8 leading-relaxed max-w-2xl mx-auto">
+          {homeData.donations.description}
+        </p>
+
+        <div class="bg-background border border-border p-5 rounded-2xl mb-10 max-w-2xl mx-auto shadow-sm flex items-start gap-4 text-left">
+          <Icon name="info" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" />
+          <p class="text-sm text-foreground-muted leading-relaxed">
+            <strong class="text-foreground">{homeData.donations.privacyNoteTitle}</strong> {homeData.donations.privacyNote}
+          </p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button href="/donar" size="lg" class="w-full sm:w-auto px-8 shadow-sm">
+            {homeData.donations.btn}
+          </Button>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+</PageLayout>

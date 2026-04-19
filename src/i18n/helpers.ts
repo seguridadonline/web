@@ -271,5 +271,40 @@ export function getNavRoutes(locale: Locale = defaultLocale): NavRoute[] {
     .sort((a, b) => a.order - b.order);
 }
 
+/**
+ * Navigation route information for Footer
+ */
+import { footerRoutes, type FooterRouteId } from './routes';
+
+export type NavFooterRoute = {
+  routeId: FooterRouteId;
+  label: string;
+  order: number;
+  path: string;
+};
+
+/**
+ * Get routes that should appear in the FOOTER navigation
+ */
+export function getNavFooterRoutes(locale: Locale = defaultLocale): NavFooterRoute[] {
+  return Object.entries(footerRoutes)
+    .filter(([_, route]) => route.nav?.show === true)
+    .map(([routeId, route]) => {
+      const slug = route[locale];
+      // Generamos el path manualmente para footerRoutes
+      const path = locale === defaultLocale 
+        ? (slug ? `/${slug}` : '/') 
+        : (slug ? `/${locale}/${slug}` : `/${locale}`);
+
+      return {
+        routeId: routeId as FooterRouteId,
+        label: route.nav!.label,
+        order: route.nav!.order,
+        path: path,
+      };
+    })
+    .sort((a, b) => a.order - b.order);
+  }
+
 // Re-export route types for convenience
 export { type RouteId, isValidRouteId } from './routes';

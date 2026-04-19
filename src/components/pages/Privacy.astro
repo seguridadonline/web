@@ -1,0 +1,83 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+import { getLocaleFromPath } from '@/i18n/config';
+import { es } from '@/i18n/translations/es.ts';
+import { en } from '@/i18n/translations/en.ts';
+import { fr } from '@/i18n/translations/fr.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const dictionaries: Record<string, any> = { es, en, fr };
+const currentLang = dictionaries[locale] || dictionaries.es;
+
+const privacyData = currentLang.privacy;
+
+const sectionIcons = [
+  "shield",
+  "file-search",
+  "target",
+  "server",
+  "trash-2",
+  "eye-off",
+  "wallet",
+  "scale",
+  "refresh-cw"
+];
+---
+
+<PageLayout
+  title={privacyData.meta.title}
+  description={privacyData.meta.description}
+>
+  <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-border bg-secondary/5">
+    <div class="absolute top-0 right-1/4 w-[30rem] h-[30rem] bg-brand-500/5 rounded-full blur-[100px] -z-10"></div>
+    
+    <div class="container mx-auto px-6 text-center z-10 relative max-w-3xl">
+      <div class="flex justify-center mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-foreground text-sm font-semibold border border-border shadow-sm">
+          <Icon name="file-text" class="w-4 h-4 text-brand-500" />
+          {privacyData.hero.badge}
+        </div>
+      </div>
+      
+      <h1 class="text-3xl font-extrabold tracking-tight md:text-5xl lg:text-[3.25rem] leading-tight text-foreground mb-4">
+        {privacyData.hero.title}
+      </h1>
+      
+      <p class="text-sm font-mono text-brand-600 dark:text-brand-400 mb-6">
+        {privacyData.hero.lastUpdated}
+      </p>
+      
+      <p class="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-3xl mx-auto">
+        {privacyData.hero.description}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-3xl space-y-8">
+      
+      {privacyData.sections.map((section: any, idx: number) => (
+        <div class={`relative rounded-3xl p-6 md:p-8 border shadow-sm transition-all ${section.highlight ? 'bg-brand-500/5 border-brand-500/20 hover:border-brand-500/40 overflow-hidden' : 'bg-background border-border hover:border-brand-500/30'}`}>
+          
+          {section.highlight && (
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500"></div>
+          )}
+
+          <h2 class={`text-lg md:text-xl font-bold mb-4 flex items-center gap-3 ${section.highlight ? 'text-brand-600 dark:text-brand-400' : 'text-foreground'}`}>
+            <div class={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${section.highlight ? 'bg-brand-500/10' : 'bg-secondary'}`}>
+              <Icon name={sectionIcons[idx]} class={`w-5 h-5 ${section.highlight ? 'text-brand-500' : 'text-foreground-muted'}`} />
+            </div>
+            {section.title}
+          </h2>
+          
+          <div class="text-foreground-muted leading-relaxed text-base md:text-lg md:ml-13">
+            <span set:html={section.content}></span>
+          </div>
+          
+        </div>
+      ))}
+      
+    </div>
+  </section>
+</PageLayout>

@@ -5,11 +5,11 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://example.com',
+  site: 'https://seguridadonline.org',
+  base: '/',
 
-  // i18n configuration
   i18n: {
-    defaultLocale: 'en',
+    defaultLocale: 'es',
     locales: ['en', 'es', 'fr'],
     routing: {
       prefixDefaultLocale: false,
@@ -21,11 +21,11 @@ export default defineConfig({
     mdx(),
     sitemap({
       i18n: {
-        defaultLocale: 'en',
+        defaultLocale: 'es',
         locales: {
-          en: 'en',
-          es: 'es',
-          fr: 'fr',
+          en: 'en-US',
+          es: 'es-ES',
+          fr: 'fr-FR',
         },
       },
     }),

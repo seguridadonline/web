@@ -1,16 +1,3 @@
-/**
- * Route Definitions for Translated URLs
- *
- * This file defines the URL slugs for each route in each supported locale.
- * The route ID (key) is used internally to reference routes, while the values
- * define the actual URL segments for each language.
- *
- * Example:
- * - Route 'about' → /about (en), /es/sobre-nosotros (es), /fr/a-propos (fr)
- *
- * Note: Empty string '' represents the root/home page.
- */
-
 import type { Locale } from './config';
 
 /**
@@ -34,15 +21,7 @@ export type RouteDefinition = Record<Locale, string> & {
 };
 
 /**
- * Route definitions for all static pages
- *
- * Keys are internal route IDs (use these in LocalizedLink and getLocalizedPath)
- * Values are the URL slugs for each locale, plus optional nav config
- *
- * Rules:
- * - Use lowercase letters and hyphens only (no underscores, no special chars)
- * - Empty string '' for home/root page
- * - Do not include leading or trailing slashes
+ * Route definitions for all static pages (Mainly for Header)
  */
 export const routes = {
   // Home page (root) - not shown in nav (logo links there)
@@ -52,29 +31,53 @@ export const routes = {
   },
 
   // Static pages
-  sobre_nosotros: {
-    es: 'sobre-nosotros', en: 'about', fr: 'a-propos',
-    nav: { show: true, order: 3, label: 'nav.about' },
-  },
-  contacto: {
-    es: 'contacto', en: 'contact', fr: 'contact',
-    nav: { show: true, order: 4, label: 'nav.contact' },
+  audit: {
+    es: 'auditoria', en: 'audit', fr: 'audit',
+    nav: { show: true, order: 1, label: 'nav.audit' },
   },
 
-  // Custom page: faq
-  faq: {
-    es: 'faq', en: 'faq', fr: 'faq',
-    nav: { show: true, order: 34, label: 'nav.faq' },
+  about: {
+    es: 'sobre-nosotros', en: 'about', fr: 'a-propos',
+    nav: { show: true, order: 2, label: 'nav.about' },
+  },
+
+  contact: {
+    es: 'contacto', en: 'contact', fr: 'contact',
+    nav: { show: true, order: 3, label: 'nav.contact' },
+  },
+  
+  donate: {
+    es: 'donar', en: 'donate', fr: 'soutien',
+    nav: { show: true, order: 4, label: 'nav.donate' },
   },
 } as const satisfies Record<string, RouteDefinition>;
 
 /**
- * Type-safe route identifier
+ * Route definitions for Footer specifically
  */
-export type RouteId = keyof typeof routes;
+export const footerRoutes = {
+  privacy: {
+    es: 'privacidad', en: 'privacy', fr: 'confidentialite',
+    nav: { show: true, order: 1, label: 'nav.privacy' },
+  },
+  terms: {
+    es: 'terminos', en: 'terms', fr: 'conditions',
+    nav: { show: true, order: 2, label: 'nav.terms' },
+  },
+  cookies: {
+    es: 'cookies', en: 'cookies', fr: 'cookies',
+    nav: { show: true, order: 3, label: 'nav.cookies' },
+  },
+} as const satisfies Record<string, RouteDefinition>;
 
 /**
- * Get all available route IDs
+ * Type-safe route identifiers
+ */
+export type RouteId = keyof typeof routes;
+export type FooterRouteId = keyof typeof footerRoutes;
+
+/**
+ * Get all available route IDs (from main routes)
  */
 export const routeIds = Object.keys(routes) as RouteId[];
 

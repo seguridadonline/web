@@ -22,7 +22,7 @@ import Logo from '@/components/ui/marketing/Logo/Logo.astro';
 import Icon from '@/components/ui/primitives/Icon/Icon.astro';
 import siteConfig from '@/config/site.config';
 import { type Locale, defaultLocale, getLocaleFromPath } from '@/i18n/config';
-import { useTranslations, getLocalizedPath, getNavRoutes } from '@/i18n/index';
+import { useTranslations, getLocalizedPath, getNavFooterRoutes } from '@/i18n/index';
 
 export interface NavItem {
   label: string;
@@ -98,7 +98,7 @@ const locale = localeProp || getLocaleFromPath(Astro.url.pathname);
 const t = useTranslations(locale);
 
 // Get navigation items from i18n routes or custom nav
-const defaultNav = getNavRoutes(locale);
+const defaultNav = getNavFooterRoutes(locale);
 const navItems: NavItem[] = nav || defaultNav.map(route => ({
   label: t(route.label as any) || route.label,
   href: route.path,
@@ -106,7 +106,7 @@ const navItems: NavItem[] = nav || defaultNav.map(route => ({
 
 // Default external links if none provided via nav
 const defaultExternalLinks: NavItem[] = [
-  { label: t('footer.links.twitter'), href: 'https://x.com/sguridadonline', external: true },
+  { label: 'Twitter', href: 'https://x.com/sguridadonline', external: true },
 ];
 
 // Add external links to nav if using default nav

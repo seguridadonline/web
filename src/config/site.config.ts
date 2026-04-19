@@ -50,11 +50,10 @@ export interface SiteConfig {
 
 const siteConfig: SiteConfig = {
   name: 'Seguridad Online',
-  description: 'A modern website built with Astro and Tailwind CSS',
-  url: SITE_URL || 'https://seguridadonline.org',
+  description: 'Organización independiente dedicada a la auditoría digital. Investigamos reportes de infracciones, notificamos preventivamente y gestionamos casos ante proveedores.',
+  url:'https://seguridadonline.org',
   ogImage: '/og-default.png',
   author: 'Organización de Seguridad Online',
-  // Demo contact info - replace with your actual business details
   email: 'info@seguridadonline.org',
   socialLinks: [
     'https://x.com/sguridadonline',
@@ -65,8 +64,8 @@ const siteConfig: SiteConfig = {
     creator: '@sguridadonline',
   },
   verification: {
-    google: GOOGLE_SITE_VERIFICATION,
-    bing: BING_SITE_VERIFICATION,
+    google: '',
+    bing: '',
   },
   // Branding: Logo files live in src/assets/branding/
   // Replace the SVG files there with your own branding
@@ -78,7 +77,7 @@ const siteConfig: SiteConfig = {
       svg: '/favicon.svg',
     },
     colors: {
-      themeColor: '#F94C10',
+      themeColor: '#008cff',
       backgroundColor: '#ffffff',
     },
   },

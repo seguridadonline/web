@@ -194,14 +194,8 @@ const buttonId = `${menuId}-button`;
       hasLogoSlot ? (
         <slot name="logo" />
       ) : (
-        <a href={getLocalizedPath('home', locale)} class="flex items-center gap-2">
-          <Logo size={size === 'lg' ? 'md' : 'sm'} forceDark={isInvert} />
-          <span class={cn(
-            'font-display text-xl font-bold tracking-tight',
-            isInvert ? 'text-on-invert' : 'text-brand-500'
-          )}>
-            {logoText || siteConfig.name}
-          </span>
+        <a href={getLocalizedPath('home', locale)} class="flex items-center">
+          <Logo variant="full" size="2xl" forceDark={isInvert} class="w-auto" />
         </a>
       )
     )}

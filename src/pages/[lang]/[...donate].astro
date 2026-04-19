@@ -1,0 +1,23 @@
+---
+import Donate from '@/components/pages/Donate.astro';
+import { routes, footerRoutes } from '@/i18n/routes';
+
+export function getStaticPaths() {
+  const locales = ['en', 'fr'];
+  
+  const allRoutes = { ...routes, ...footerRoutes };
+
+  return locales.map((locale) => {
+    return {
+      params: { 
+        lang: locale, 
+        donate: allRoutes.donate[locale] 
+      },
+      props: { lang: locale }
+    };
+  });
+}
+
+const { lang } = Astro.props;
+---
+<Donate lang={lang} />

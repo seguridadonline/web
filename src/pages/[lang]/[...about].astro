@@ -1,0 +1,23 @@
+---
+import About from '@/components/pages/About.astro';
+import { routes, footerRoutes } from '@/i18n/routes';
+
+export function getStaticPaths() {
+  const locales = ['en', 'fr'];
+  
+  const allRoutes = { ...routes, ...footerRoutes };
+
+  return locales.map((locale) => {
+    return {
+      params: { 
+        lang: locale, 
+        about: allRoutes.about[locale] 
+      },
+      props: { lang: locale }
+    };
+  });
+}
+
+const { lang } = Astro.props;
+---
+<About lang={lang} />

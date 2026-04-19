@@ -1,0 +1,23 @@
+---
+import Privacy from '@/components/pages/Privacy.astro';
+import { routes, footerRoutes } from '@/i18n/routes';
+
+export function getStaticPaths() {
+  const locales = ['en', 'fr'];
+  
+  const allRoutes = { ...routes, ...footerRoutes };
+
+  return locales.map((locale) => {
+    return {
+      params: { 
+        lang: locale, 
+        privacy: allRoutes.privacy[locale] 
+      },
+      props: { lang: locale }
+    };
+  });
+}
+
+const { lang } = Astro.props;
+---
+<Privacy lang={lang} />

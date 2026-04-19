@@ -1,0 +1,120 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/ui/form/Button/Button.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+import { getLocaleFromPath } from '@/i18n/config';
+import { es } from '@/i18n/translations/es.ts';
+import { en } from '@/i18n/translations/en.ts';
+import { fr } from '@/i18n/translations/fr.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const dictionaries: Record<string, any> = { es, en, fr };
+const currentLang = dictionaries[locale] || dictionaries.es;
+
+const aboutData = currentLang.about;
+
+const pillarIcons = ["eye-off", "shield", "scale"];
+---
+
+<PageLayout
+  title={aboutData.meta.title}
+  description={aboutData.meta.description}
+>
+  <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-border bg-secondary/5">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-brand-500/10 rounded-full blur-[100px] -z-10"></div>
+    
+    <div class="container mx-auto px-6 text-center z-10 relative max-w-4xl">
+      <h1 class="text-3xl font-extrabold tracking-tight md:text-5xl lg:text-[3.25rem] leading-tight text-foreground mb-6" set:html={aboutData.hero.title}></h1>
+      <p class="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-3xl mx-auto" set:html={aboutData.hero.description}></p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="lg:w-1/2">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-foreground text-sm font-semibold mb-6 border border-border shadow-sm">
+            <Icon name="flag" class="w-4 h-4 text-brand-500" />
+            {aboutData.origin.badge}
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-6 text-foreground">{aboutData.origin.title}</h2>
+          <div class="space-y-4 text-base md:text-lg text-foreground-muted leading-relaxed">
+            {aboutData.origin.paragraphs.map((p: string) => (
+              <p set:html={p}></p>
+            ))}
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+          <div class="bg-background p-6 md:p-8 rounded-2xl border border-border shadow-sm hover:border-brand-500/30 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mb-5 shrink-0">
+              <Icon name="bot" class="w-5 h-5 text-foreground-muted" />
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-foreground">{aboutData.origin.cards.automated.title}</h3>
+            <p class="text-sm text-foreground-muted leading-relaxed">{aboutData.origin.cards.automated.description}</p>
+          </div>
+          
+          <div class="bg-brand-500/5 p-6 md:p-8 rounded-2xl border border-brand-500/20 shadow-sm transition-colors sm:translate-y-8">
+            <div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center mb-5 shrink-0">
+              <Icon name="users" class="w-5 h-5 text-brand-500" />
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-brand-600 dark:text-brand-400">{aboutData.origin.cards.human.title}</h3>
+            <p class="text-sm text-brand-700/80 dark:text-brand-300/80 leading-relaxed">{aboutData.origin.cards.human.description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-secondary/10 border-y border-border">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground">{aboutData.pillars.title}</h2>
+        <p class="mt-4 text-foreground-muted text-lg">{aboutData.pillars.description}</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+        {aboutData.pillars.items.map((pillar: any, idx: number) => (
+          <div class="bg-background p-6 md:p-8 rounded-2xl border border-border shadow-sm hover:border-brand-500/30 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mb-5 shrink-0">
+              <Icon name={pillarIcons[idx]} class="w-5 h-5 text-foreground" />
+            </div>
+            <h3 class="text-lg md:text-xl font-bold mb-3 text-foreground">{pillar.title}</h3>
+            <p class="text-foreground-muted text-sm md:text-base leading-relaxed">{pillar.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <div class="bg-secondary/20 border border-border p-8 md:p-16 rounded-3xl text-center shadow-sm relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-500/5 blur-[80px] -z-10"></div>
+        
+        <div class="w-16 h-16 bg-background rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm border border-border">
+           <Icon name="heart-handshake" class="w-8 h-8 text-brand-500" />
+        </div>
+
+        <h2 class="text-2xl md:text-4xl font-bold mb-6 text-foreground">{aboutData.funding.title}</h2>
+        <p class="text-base md:text-lg text-foreground-muted mb-8 leading-relaxed max-w-2xl mx-auto" set:html={aboutData.funding.description}></p>
+        
+        <div class="bg-background border border-border p-5 md:p-6 rounded-2xl mb-10 max-w-2xl mx-auto shadow-sm flex items-start gap-4 text-left">
+          <Icon name="info" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" />
+          <p class="text-sm md:text-base text-foreground-muted leading-relaxed">
+            {aboutData.funding.note}
+          </p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button href="/donar" size="lg" class="w-full sm:w-auto px-8 shadow-sm">
+            {aboutData.funding.btnPrimary}
+          </Button>
+          <Button href="/contacto" variant="outline" size="lg" class="w-full sm:w-auto px-8 bg-background">
+            {aboutData.funding.btnSecondary}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>
