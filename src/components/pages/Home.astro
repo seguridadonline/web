@@ -4,12 +4,16 @@ import Button from '@/components/ui/form/Button/Button.astro';
 import Icon from '@/components/ui/primitives/Icon/Icon.astro';
 
 import { getLocaleFromPath } from '@/i18n/config';
+import { getLocalizedPath} from '@/i18n/index';
 
 import { es } from '@/i18n/translations/es.ts';
 import { en } from '@/i18n/translations/en.ts';
 import { fr } from '@/i18n/translations/fr.ts';
 
 const locale = getLocaleFromPath(Astro.url.pathname);
+
+const contactHref = getLocalizedPath('contact', locale);
+const donateHref = getLocalizedPath('donate', locale);
 
 const dictionaries: Record<string, any> = { es, en, fr };
 const currentLang = dictionaries[locale] || dictionaries.es;
@@ -53,7 +57,7 @@ const processIcons = ["inbox", "activity", "user-search", "send", "clock", "shie
       </p>
       
       <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <Button size="lg" href="/contacto" class="w-full sm:w-auto text-lg px-8 shadow-sm">
+        <Button size="lg" href={contactHref} class="w-full sm:w-auto text-lg px-8 shadow-sm">
           {homeData.hero.btnPrimary}
         </Button>
         <Button size="lg" variant="outline" href="#como-trabajamos" class="w-full sm:w-auto text-lg px-8 bg-background">
@@ -212,7 +216,7 @@ const processIcons = ["inbox", "activity", "user-search", "send", "clock", "shie
         </div>
         
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button href="/donar" size="lg" class="w-full sm:w-auto px-8 shadow-sm">
+          <Button href={donateHref} size="lg" class="w-full sm:w-auto px-8 shadow-sm">
             {homeData.donations.btn}
           </Button>
         </div>
