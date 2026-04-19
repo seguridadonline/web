@@ -76,6 +76,164 @@ const processIcons = ["inbox", "activity", "user-search", "send", "clock", "shie
     </div>
   </section>
 
+  <div class="case-alert-container">
+    <div class="case-alert-card">
+      <div class="case-alert-content">
+        <div class="case-alert-header">
+          <span class="alert-badge">ALERTA DE AUDITORÍA</span>
+          <span class="case-id">REF: CASE-VEN-2026-EGZ</span>
+        </div>
+        
+        <div class="case-alert-body">
+          <p>
+            El dominio <strong>el-tio-egoz.com</strong> y sus plataformas vinculadas han sido reportados bajo nuestro protocolo de seguridad. 
+            Tras el bloqueo de los canales de mediación, se ha iniciado el proceso de reporte masivo ante 
+            <strong>Vercel, Porkbun y Google</strong>.
+          </p>
+        </div>
+
+        <div class="case-alert-footer">
+          <div class="status-indicator">
+            <span class="dot"></span>
+            <span>ESTADO: EJECUCIÓN DE BAJA EN CURSO (48H)</span>
+          </div>
+          <a href="mailto:alert@seguridadonline.org" class="contact-link">
+            CONTACTAR AUDITORÍA
+          </a>
+        </div>
+      </div>
+      
+      <div class="alert-glow"></div>
+    </div>
+  </div>
+
+
+<style>
+  .case-alert-container {
+    width: 100%;
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .case-alert-card {
+    position: relative;
+    max-width: 800px;
+    width: 100%;
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(0, 140, 255, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .case-alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .alert-badge {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .case-id {
+    color: #9ca3af;
+    font-size: 0.75rem;
+    font-family: monospace;
+  }
+
+  .case-alert-body p {
+    color: #d1d5db;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .case-alert-body strong {
+    color: #38bdf8;
+    font-weight: 600;
+  }
+
+  .case-alert-footer {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #38bdf8;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #38bdf8;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .contact-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .contact-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .alert-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(0, 140, 255, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @media (max-width: 640px) {
+    .case-alert-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
   <!-- LO QUE ABARCAMOS -->
   <section class="py-20 bg-secondary/10">
     <div class="container mx-auto px-6">
