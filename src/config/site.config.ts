@@ -52,7 +52,7 @@ const siteConfig: SiteConfig = {
   name: 'Seguridad Online',
   description: 'Organización independiente dedicada a la auditoría digital. Investigamos reportes de infracciones, notificamos preventivamente y gestionamos casos ante proveedores.',
   url:'https://seguridadonline.org',
-  ogImage: '/og-default.png',
+  ogImage: '',
   author: 'Organización de Seguridad Online',
   email: 'info@seguridadonline.org',
   socialLinks: [

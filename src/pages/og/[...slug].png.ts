@@ -8,20 +8,24 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = [];
   const allRouteDefinitions = { ...routes, ...footerRoutes };
 
-  for (const locale of locales) {
+for (const locale of locales) {
     const translations = getTranslations(locale as any) as any;
 
     for (const [routeId, definition] of Object.entries(allRouteDefinitions)) {
-      // Obtenemos el slug traducido para la URL del recurso
       const slugValue = definition[locale as keyof typeof definition] as string;
       
-      // Construimos el path de la imagen: "es/index", "fr/a-propos", etc.
-      // Si es el idioma por defecto y el slug es vacío (home), usamos 'index'
-      const langPrefix = locale === defaultLocale ? '' : `${locale}/`;
-      const finalSlug = slugValue === '' ? `${locale}/index` : `${langPrefix}${slugValue}`;
+      let finalSlug: string;
 
-      // Intentamos sacar título y descripción del diccionario i18n
-      // Buscamos en translations[routeId].meta.title
+      if (slugValue === '') {
+        // Es una página de inicio (root de ese idioma)
+        // Si es el default (es), queda como 'index'. Si no, como 'en', 'fr', etc.
+        finalSlug = locale === defaultLocale ? 'index' : locale;
+      } else {
+        // Es una subpágina. Mantenemos el esquema: 'en/about' o 'sobre-nosotros'
+        const langPrefix = locale === defaultLocale ? '' : `${locale}/`;
+        finalSlug = `${langPrefix}${slugValue}`;
+      }
+
       const meta = translations[routeId]?.meta || {};
       
       paths.push({
