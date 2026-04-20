@@ -6,7 +6,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://seguridadonline.org',
-  base: '/',
 
   i18n: {
     defaultLocale: 'es',
