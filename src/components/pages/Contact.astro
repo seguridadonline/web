@@ -145,7 +145,6 @@ const ruleStyles = [
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // UI Feedback
     btn.disabled = true;
     btn.innerText = "Enviando...";
     
@@ -154,16 +153,14 @@ const ruleStyles = [
       await fetch(form.action, {
         method: 'POST',
         body: formData,
-        mode: 'no-cors' // Necesario para Google Apps Script
+        mode: 'no-cors'
       });
       
-      // Éxito
       feedback.classList.remove('hidden', 'bg-red-500/10', 'border-red-500/20', 'text-red-600');
       feedback.classList.add('bg-green-500/10', 'border-green-500/20', 'text-green-600');
       feedback.innerText = "¡Mensaje enviado correctamente! Te contactaremos pronto.";
       form.reset();
     } catch (error) {
-      // Error
       feedback.classList.remove('hidden', 'bg-green-500/10', 'border-green-500/20', 'text-green-600');
       feedback.classList.add('bg-red-500/10', 'border-red-500/20', 'text-red-600');
       feedback.innerText = "Hubo un error al enviar. Por favor, intenta de nuevo o escribe a info@seguridadonline.org";

@@ -50,6 +50,11 @@ export const routes = {
     es: 'donar', en: 'donate', fr: 'soutien',
     nav: { show: true, order: 4, label: 'nav.donate' },
   },
+
+  tioEgoz: {
+    es: 'el-tio-egoz', en: 'el-tio-egoz', fr: 'el-tio-egoz',
+    nav: { show: false, order: 5, label: 'nav.tioEgoz' },
+  },
 } as const satisfies Record<string, RouteDefinition>;
 
 /**

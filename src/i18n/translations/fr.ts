@@ -17,6 +17,7 @@ export const fr: TranslationKeys = {
     terms: 'Conditions',
     privacy: 'Confidentialité',
     cookies: 'Cookies',
+    tioEgoz: 'El Tio Egoz',
   },
 
   // Accueil
@@ -518,5 +519,53 @@ privacy: {
         content: "<p>Si vous avez des questions sur notre politique de cookies ou sur le fonctionnement technique du site, vous pouvez nous contacter via le formulaire officiel disponible dans la section contact.</p>"
       }
     ]
+  },
+
+  // Egoz
+  tioEgoz: {
+    meta: {
+      title: "Est-il sûr de télécharger sur El Tío Egoz ? Alerte aux virus et arnaques",
+      description: "Analyse de sécurité de el-tio-egoz.com. Découvrez pourquoi le téléchargement de jeux sur El Tío Egoz n'est pas sûr. Preuves de virus (ramsoftware) et de fraude sur Patreon.",
+    },
+    hero: {
+      badge: "ALERTE DE SÉCURITÉ CRITIQUE",
+      title: "Analyse de Sécurité :<br/> <span class='text-red-500'>el-tio-egoz.com</span>",
+      description: "Infrastructure web en cours d'investigation. Des rapports confirmés documentent que les jeux d'El Tío Egoz contiennent des codes malveillants, violent les conditions des fournisseurs d'hébergement et présentent un risque élevé d'escroquerie financière pour les utilisateurs.",
+    },
+    evidence: {
+      badge: "PREUVES TECHNIQUES",
+      title: "Aveux de Distribution de Malware",
+      paragraphs: [
+        "Lors d'un audit de sécurité du site web <strong>el-tio-egoz.com</strong>, des communications publiques ont été interceptées dans lesquelles l'administrateur de la plateforme admet l'injection délibérée de code nuisible dans les fichiers distribués.",
+        "Ce virus, catalogué par l'auteur lui-même comme <strong>'ramsoftware'</strong>, est spécifiquement conçu pour saboter le matériel et consommer de manière agressive la mémoire RAM des appareils lors de l'ouverture de ses applications ou jeux.",
+        "Ci-dessous, nous présentons deux captures d'écran légitimes et documentées qui confirment ces aveux."
+      ],
+      imageAltTelegram: "Capture d'écran des aveux de malware sur le canal Telegram officiel d'El Tío Egoz",
+      imageCaptionTelegram: "Source 1 : Message original intercepté sur leur canal Telegram officiel.",
+      imageAltMessage: "Capture d'écran du message direct avouant l'inclusion de ramsoftware dans les jeux",
+      imageCaptionMessage: "Source 2 : Chat direct avec les aveux explicites du virus."
+    },
+    financial: {
+      title: "Arnaques et Risque Financier sur Patreon",
+      description: "Avertissement urgent concernant la monétisation trompeuse et les comptes de paiement associés à El Tío Egoz.",
+      items: [
+        {
+          icon: "alert-triangle",
+          title: "Audit Patreon",
+          description: "N'entrez pas de méthodes de paiement. Le compte Patreon d'El Tío Egoz est en cours d'examen par les équipes de Trust & Safety en raison de la monétisation de contenu illicite et de la revente de jeux protégés par le droit d'auteur."
+        },
+        {
+          icon: "ban",
+          title: "Suspension sans Remboursement",
+          description: "En finançant el-tio-egoz.com, vous violez les conditions de service financier. Il y a un risque très élevé que son compte soit suspendu à tout moment, entraînant la perte totale de votre abonnement sans aucun remboursement."
+        }
+      ]
+    },
+    cta: {
+      title: "Protégez votre Équipement des Téléchargements Dangereux",
+      description: "La sécurité numérique est fondamentale. Soutenir les développeurs et artistes indépendants sur les plateformes officielles garantit que les jeux que vous téléchargez sont 100% sûrs et sans virus, tout en protégeant le véritable travail de leurs créateurs.",
+      btnPrimary: "Retour au Centre de Sécurité",
+      note: "Si vous avez téléchargé des fichiers depuis el-tio-egoz.com ou si vous avez été victime de prélèvements abusifs sur leur Patreon, nous vous suggérons de désinstaller les programmes immédiatement, d'exécuter un antivirus et de contacter votre banque."
+    }
   }
 } as const;

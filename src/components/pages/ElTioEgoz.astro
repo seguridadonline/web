@@ -1,0 +1,187 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/ui/form/Button/Button.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+import { Image } from 'astro:assets';
+import telegramEvidencia from '@/assets/Telegram.png';
+import mensajeEvidencia from '@/assets/Message.jpg';
+
+import { getLocaleFromPath } from '@/i18n/config';
+import { getLocalizedPath } from '@/i18n/index';
+import { es } from '@/i18n/translations/es.ts';
+import { en } from '@/i18n/translations/en.ts';
+import { fr } from '@/i18n/translations/fr.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const homeHref = getLocalizedPath('home', locale);
+const dictionaries: Record<string, any> = { es, en, fr };
+const currentLang = dictionaries[locale] || dictionaries.es;
+
+const alertData = currentLang.tioEgoz;
+---
+
+<PageLayout
+  title={alertData.meta.title}
+  description={alertData.meta.description}
+>
+  <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-border bg-secondary/5">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-red-500/10 rounded-full blur-[100px] -z-10"></div>
+    
+    <div class="container mx-auto px-6 text-center z-10 relative max-w-4xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 text-red-500 text-sm font-bold mb-6 border border-red-500/20 shadow-sm">
+        <Icon name="alert-circle" class="w-4 h-4" />
+        {alertData.hero.badge}
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight md:text-5xl lg:text-[3.25rem] leading-tight text-foreground mb-6" set:html={alertData.hero.title}></h1>
+      <p class="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-3xl mx-auto" set:html={alertData.hero.description}></p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="lg:w-1/2">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-foreground text-sm font-semibold mb-6 border border-border shadow-sm">
+            <Icon name="search" class="w-4 h-4 text-brand-500" />
+            {alertData.evidence.badge}
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-6 text-foreground">{alertData.evidence.title}</h2>
+          <div class="space-y-4 text-base md:text-lg text-foreground-muted leading-relaxed">
+            {alertData.evidence.paragraphs.map((p: string) => (
+              <p set:html={p}></p>
+            ))}
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2 w-full">
+          <div class="bg-background p-2 rounded-2xl border border-border shadow-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="evidence-btn rounded-xl border border-border/50 overflow-hidden relative group cursor-zoom-in">
+                <Image 
+                  src={telegramEvidencia} 
+                  alt={alertData.evidence.imageAltTelegram}
+                  class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none">
+                  <div class="bg-background/90 text-foreground p-2 rounded-full shadow-lg backdrop-blur-sm">
+                    <Icon name="search" class="w-5 h-5 text-brand-500" />
+                  </div>
+                </div>
+                <p class="text-xs text-center text-foreground-muted mt-2 italic px-2 pb-2">
+                  {alertData.evidence.imageCaptionTelegram}
+                </p>
+              </div>
+              <div class="evidence-btn rounded-xl border border-border/50 overflow-hidden relative group cursor-zoom-in">
+                <Image 
+                  src={mensajeEvidencia} 
+                  alt={alertData.evidence.imageAltMessage}
+                  class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none">
+                  <div class="bg-background/90 text-foreground p-2 rounded-full shadow-lg backdrop-blur-sm">
+                    <Icon name="search" class="w-5 h-5 text-brand-500" />
+                  </div>
+                </div>
+                <p class="text-xs text-center text-foreground-muted mt-2 italic px-2 pb-2">
+                  {alertData.evidence.imageCaptionMessage}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-red-500/5 border-y border-red-500/10">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground">{alertData.financial.title}</h2>
+        <p class="mt-4 text-foreground-muted text-lg">{alertData.financial.description}</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+        {alertData.financial.items.map((item: any) => (
+          <div class="bg-background p-6 md:p-8 rounded-2xl border-l-4 border-red-500 shadow-sm border-y border-r border-y-border border-r-border hover:border-r-red-500/30 hover:border-y-red-500/30 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center mb-5 shrink-0">
+              <Icon name={item.icon} class="w-5 h-5 text-red-500" />
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-foreground">{item.title}</h3>
+            <p class="text-sm text-foreground-muted leading-relaxed">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <div class="bg-secondary/20 border border-border p-8 md:p-16 rounded-3xl text-center shadow-sm relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-500/5 blur-[80px] -z-10"></div>
+        
+        <div class="w-16 h-16 bg-background rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm border border-border border-t-brand-500">
+           <Icon name="shield-check" class="w-8 h-8 text-brand-500" />
+        </div>
+
+        <h2 class="text-2xl md:text-4xl font-bold mb-6 text-foreground">{alertData.cta.title}</h2>
+        <p class="text-base md:text-lg text-foreground-muted mb-8 leading-relaxed max-w-2xl mx-auto" set:html={alertData.cta.description}></p>
+        
+        <div class="bg-background border border-border p-5 md:p-6 rounded-2xl mb-10 max-w-2xl mx-auto shadow-sm flex items-start gap-4 text-left">
+          <Icon name="info" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" />
+          <p class="text-sm md:text-base text-foreground-muted leading-relaxed">
+            {alertData.cta.note}
+          </p>
+        </div>
+        
+        <div class="flex items-center justify-center">
+          <Button href={homeHref} size="lg" class="px-8 shadow-sm">
+            {alertData.cta.btnPrimary}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dialog id="evidenceModal" class="backdrop:bg-background/90 backdrop:backdrop-blur-sm bg-transparent m-auto w-11/12 max-w-6xl h-[90vh] fixed inset-0 z-50 p-0 rounded-2xl overflow-hidden border border-border shadow-2xl">
+    <div class="relative w-full h-full flex flex-col items-center justify-center p-2 md:p-8">
+      <button id="closeModalBtn" class="absolute top-4 right-4 z-50 bg-secondary/80 text-foreground hover:bg-secondary p-3 rounded-full backdrop-blur-md transition-colors border border-border cursor-pointer shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <img id="modalImage" src="" alt="Evidencia en pantalla completa" class="max-w-full max-h-full object-contain rounded-lg drop-shadow-2xl" />
+    </div>
+  </dialog>
+
+  <script>
+    const modal = document.getElementById('evidenceModal') as HTMLDialogElement;
+    const modalImg = document.getElementById('modalImage') as HTMLImageElement;
+    const closeBtn = document.getElementById('closeModalBtn');
+    const buttons = document.querySelectorAll('.evidence-btn');
+
+    // Abrir modal
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const img = btn.querySelector('img');
+        if (img && modal && modalImg) {
+          modalImg.src = img.src;
+          modal.showModal();
+          document.body.style.overflow = 'hidden'; // Evita que la página de fondo haga scroll
+        }
+      });
+    });
+
+    // Cerrar modal
+    const close = () => {
+      if (modal) {
+        modal.close();
+        document.body.style.overflow = ''; // Devuelve el scroll a la normalidad
+      }
+    };
+
+    closeBtn?.addEventListener('click', close);
+
+    // Cerrar si hacen clic en el fondo borroso (fuera de la imagen)
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) close();
+    });
+  </script>
+</PageLayout>

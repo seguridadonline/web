@@ -1,0 +1,23 @@
+---
+import Egoz from '@/components/pages/ElTioEgoz.astro';
+import { routes, footerRoutes } from '@/i18n/routes';
+
+export function getStaticPaths() {
+  const locales = ['en', 'fr'];
+  
+  const allRoutes = { ...routes, ...footerRoutes };
+
+  return locales.map((locale) => {
+    return {
+      params: { 
+        lang: locale, 
+        tioEgoz: allRoutes.tioEgoz[locale] 
+      },
+      props: { lang: locale }
+    };
+  });
+}
+
+const { lang } = Astro.props;
+---
+<Egoz lang={lang} />

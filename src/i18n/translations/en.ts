@@ -17,6 +17,7 @@ export const en: TranslationKeys = {
     terms: 'Terms',
     privacy: 'Privacy',
     cookies: 'Cookies',
+    tioEgoz: 'El Tio Egoz',
   },
 
   // Home
@@ -518,5 +519,53 @@ privacy: {
         content: "<p>If you have questions about our cookie policy or the technical operation of the site, you can reach us through the official form available in the contact section.</p>"
       }
     ]
+  },
+
+  // Egoz
+  tioEgoz: {
+    meta: {
+      title: "Is downloading from El Tío Egoz safe? Malware and Scam Alert",
+      description: "Security analysis of el-tio-egoz.com. Discover why downloading games from El Tío Egoz is not safe. Evidence of viruses (ramsoftware) and fraud on Patreon.",
+    },
+    hero: {
+      badge: "CRITICAL SECURITY ALERT",
+      title: "Security Analysis:<br/> <span class='text-red-500'>el-tio-egoz.com</span>",
+      description: "Web infrastructure under investigation. Confirmed reports document that El Tío Egoz games contain malicious code, violate hosting provider terms, and present a high risk of financial scam for users.",
+    },
+    evidence: {
+      badge: "TECHNICAL EVIDENCE",
+      title: "Malware Distribution Confession",
+      paragraphs: [
+        "During a security audit of the website <strong>el-tio-egoz.com</strong>, public communications were intercepted where the platform's administrator admits to the deliberate injection of harmful code into the distributed files.",
+        "This virus, categorized by the author himself as <strong>'ramsoftware'</strong>, is specifically designed to sabotage hardware and aggressively consume the RAM of devices when opening their applications or games.",
+        "Below, we present two legitimate and documented screenshots confirming this confession."
+      ],
+      imageAltTelegram: "Screenshot of the malware confession in the official El Tío Egoz Telegram channel",
+      imageCaptionTelegram: "Source 1: Original message intercepted from their official Telegram channel.",
+      imageAltMessage: "Screenshot of the direct message confessing the inclusion of ramsoftware in the games",
+      imageCaptionMessage: "Source 2: Direct chat with the explicit confession of the virus."
+    },
+    financial: {
+      title: "Scams and Financial Risk on Patreon",
+      description: "Urgent warning regarding deceptive monetization and payment accounts associated with El Tío Egoz.",
+      items: [
+        {
+          icon: "alert-triangle",
+          title: "Patreon Audit",
+          description: "Do not enter payment methods. The El Tío Egoz Patreon account is under review by Trust & Safety teams due to the monetization of illicit content and the resale of copyrighted games."
+        },
+        {
+          icon: "ban",
+          title: "Suspension without Refund",
+          description: "By funding el-tio-egoz.com, you violate financial terms of service. There is a very high risk that their account will be suspended at any moment, resulting in the total loss of your subscription with no refund."
+        }
+      ]
+    },
+    cta: {
+      title: "Protect Your Equipment from Dangerous Downloads",
+      description: "Digital security is fundamental. Supporting independent developers and artists on official platforms ensures that the games you download are 100% safe and virus-free, while also protecting the real work of their creators.",
+      btnPrimary: "Return to Security Center",
+      note: "If you have downloaded files from el-tio-egoz.com or have been a victim of improper charges on their Patreon, we strongly suggest you uninstall the programs immediately, run an antivirus, and contact your bank."
+    }
   }
 } as const;
